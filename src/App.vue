@@ -3,24 +3,54 @@
     <div id="nav">
       <router-link :to="{ name: 'main' }">Main Page</router-link>|
       <router-link :to="{ name: 'search' }">Search</router-link>|
+      <router-link :to="{ name: 'about' }">About</router-link>|
       <!-- {{ !$root.store.username }} -->
-      <span v-if="!$root.store.username">
-        <!-- Guest: -->
-        <router-link :to="{ name: 'register' }">Register</router-link>|
-        <router-link :to="{ name: 'login' }">Login</router-link>|
-      </span>
-      <span v-else>
-        {{ $root.store.username }}: <button @click="Logout">Logout</button>|
-      </span>
+      <div id="personal-dropdown" v-if="$root.store.username" :class="{ active: isPersonalActive }">
+        Personal|
+        <div class="dropdown-content">
+          <router-link :to="{ name: 'favorites' }">Favorites Recipes</router-link>
+          <router-link :to="{ name: 'myrecipes' }">My Recipes</router-link>
+          <router-link :to="{ name: 'familyrecipes' }">Family Recipes</router-link>
+        </div>
+        <router-link :to="{ name: 'addrecipe' }">Add Recipe</router-link>
+      </div>
+      <!-- {{ !$root.store.username }} -->
+      <div id="reglog">
+        <span v-if="!$root.store.username">
+          <!-- Guest: -->
+          <div id="guest">
+            <h5>Hello Guest:</h5>
+          </div>
+          <div id="reglog-links">
+            <router-link :to="{ name: 'register' }">Register</router-link>|
+            <router-link :to="{ name: 'login' }">Login</router-link>|
+          </div>
+        </span>
+        <span v-else>
+          <div id="user">
+            <span class="username">{{ $root.store.username }}</span>
+            <button @click="Logout" class="logout-button">Logout</button>
+          </div>
+        </span>
+      </div>
     </div>
-
     <router-view />
   </div>
 </template>
 
+
 <script>
 export default {
   name: "App",
+  computed: {
+    isPersonalActive() {
+      return (
+        this.$route.name === "favorites" ||
+        this.$route.name === "myrecipes" ||
+        this.$route.name === "familyrecipes"
+      );
+    },
+  },
   methods: {
     Logout() {
       this.$root.store.logout();
@@ -47,14 +77,118 @@ export default {
 
 #nav {
   padding: 30px;
+  border-bottom: 1px solid #ccc;
 }
 
 #nav a {
   font-weight: bold;
   color: #2c3e50;
+  transition: color 0.3s ease-in-out;
+}
+
+#nav a:hover {
+  color: #42b983;
 }
 
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+#reglog {
+  float: right;
+  display: flex;
+  align-items: center;
+}
+
+#reglog h5 {
+  margin-right: 10px;
+  font-weight: normal;
+}
+
+#reglog router-link {
+  margin-right: 10px;
+}
+
+#reglog span {
+  margin-right: 10px;
+}
+
+#personal-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: color 0.3s ease-in-out;
+}
+
+#personal-dropdown:hover {
+  color: #42b983;
+}
+
+#personal-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(250, 248, 248, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+#personal-dropdown:hover .dropdown-content {
+  display: block;
+} 
+
+#personal-dropdown .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s ease-in-out;
+}
+
+#personal-dropdown .dropdown-content a:hover {
+  color: #42b983;
+}
+
+#personal-dropdown .dropdown-content a.router-link-exact-active {
+  color: #42b983;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+#personal-dropdown.active {
+  color: #42b983;
+}
+
+#guest {
+  display: inline-block;
+}
+
+#reglog-links {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+#user {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.logout-button {
+  background-color: #42b983;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 </style>
