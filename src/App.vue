@@ -5,15 +5,18 @@
       <router-link :to="{ name: 'search' }">Search</router-link>|
       <router-link :to="{ name: 'about' }">About</router-link>|
       <!-- {{ !$root.store.username }} -->
-      <div id="personal-dropdown" v-if="$root.store.username" :class="{ active: isPersonalActive }">
+<div id="personal-dropdown" v-if="$root.store.username" :class="{ active: isPersonalActive }">
         Personal|
         <div class="dropdown-content">
           <router-link :to="{ name: 'favorites' }">Favorites Recipes</router-link>
           <router-link :to="{ name: 'myrecipes' }">My Recipes</router-link>
           <router-link :to="{ name: 'familyrecipes' }">Family Recipes</router-link>
         </div>
-        <router-link :to="{ name: 'addrecipe' }">Add Recipe</router-link>
       </div>
+      <span v-if="$root.store.username">
+        <router-link :to="{ name: 'addrecipe' }">Add Recipe</router-link>
+      </span>
+
       <!-- {{ !$root.store.username }} -->
       <div id="reglog">
         <span v-if="!$root.store.username">
@@ -87,7 +90,7 @@ export default {
 }
 
 #nav a:hover {
-  color: #42b983;
+  color: #0c99f7;
 }
 
 #nav a.router-link-exact-active {
@@ -123,7 +126,8 @@ export default {
 }
 
 #personal-dropdown:hover {
-  color: #42b983;
+  color: #0c99f7;
+  text-decoration: underline;
 }
 
 #personal-dropdown .dropdown-content {
@@ -138,6 +142,8 @@ export default {
 
 #personal-dropdown:hover .dropdown-content {
   display: block;
+  /* Add a delay before hiding the dropdown content */
+  transition-delay: 0.3s;
 } 
 
 #personal-dropdown .dropdown-content a {
@@ -149,7 +155,8 @@ export default {
 }
 
 #personal-dropdown .dropdown-content a:hover {
-  color: #42b983;
+  color: #0c99f7;
+  text-decoration: underline;
 }
 
 #personal-dropdown .dropdown-content a.router-link-exact-active {
@@ -190,5 +197,19 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
+
+
+
+#personal-dropdown .dropdown-content {
+  /* Existing styles... */
+  margin-top: 1px; /* Add a small margin to separate the dropdown from the parent */
+}
+
+#personal-dropdown .dropdown-content:hover {
+  display: block;
+  /* Cancel the transition delay when hovering over the dropdown content */
+  transition-delay: 0s;
+}
+
 
 </style>
