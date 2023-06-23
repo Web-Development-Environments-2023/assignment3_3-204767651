@@ -1,33 +1,27 @@
 <template>
   <div class="container">
-    <h1 class="title">Main Page</h1>
-    <RecipePreviewList ref="randomList" vertical="true" title="Randome Recipes" class="RandomRecipes center" />
-    <LoginPage v-if="!$root.store.username"></LoginPage>
-    <!-- <router-link v-if="!$root.store.username" to="/login" tag="button">Login!</router-link> -->
-   
-    <RecipePreviewList v-else
-      title="Last Viewed Recipes"
-      :class="{
-        RandomRecipes: true,
-        blur: !$root.store.username,
-        center: true
-      }"
-      disabled
-      vertical="true"
-      type="lastWatched"
-    ></RecipePreviewList>
+    <!-- <h1 class="title">Main Page</h1> -->
+    <!-- Left Column -->
+    <div class="left-column">
+      <h4 class="column-title">Discover these recipes</h4>
+      <RecipePreviewList ref="randomList"  class="RandomRecipes" />
+      <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button>
+    </div>
 
 
-
-      <tr>
-        <td>
-          <b-button @click="randomizeRecipes">More Recipes!</b-button>
-        </td>
-      </tr>
-    <!-- <div
-      style="position: absolute;top: 70%;left: 50%;transform: translate(-50%, -50%);"
-    >
-    </div> -->
+    <!-- Right Column -->
+    <div class="right-column">
+      <template v-if="$root.store.username">
+        <h2 class="column-title">Recently Viewed Recipes</h2>
+        <RecipePreviewList
+          class="LastViewedRecipes"
+          type="lastWatched"
+        ></RecipePreviewList>
+      </template>
+      <template v-else>
+        <LoginPage></LoginPage>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -37,31 +31,45 @@ import LoginPage from "./LoginPage.vue";
 export default {
   components: {
     RecipePreviewList,
-    LoginPage
+    LoginPage,
   },
   methods: {
     async randomizeRecipes() {
       await this.$refs.randomList.updateRecipes();
-    } 
+    },
   },
   mounted() {
     this.randomizeRecipes();
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.RandomRecipes {
-  margin: 10px 0 10px;
+.container {
+  display: flex;
+  justify-content: space-between;
 }
-.blur {
-  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
-  filter: blur(2px);
+
+.left-column {
+  flex-basis: 30%;
+  padding-right: 20px;
 }
-::v-deep .blur .recipe-preview {
-  pointer-events: none;
-  cursor: default;
+
+.right-column {
+  flex-basis: 70%;
+}
+
+.column-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.RandomRecipes,
+.LastViewedRecipes {
+  margin-bottom: 10px;
+}
+
+.more-recipes-button {
+  margin-top: 20px;
 }
 </style>
-
-
