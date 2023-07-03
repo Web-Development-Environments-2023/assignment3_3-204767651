@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <h3>
-      {{ title }}:
+      {{ title }}
     </h3>
     <div class="recipe-column">
       <RecipePreview v-for="r in recipes" :key="r.id" class="recipePreview" :recipe="r" />
@@ -55,9 +55,11 @@ export default {
 .recipe-column {
   display: flex;
   flex-direction: column;
+
 }
 
 .recipePreview {
   margin-bottom: 10px;
+  
 }
 </style>

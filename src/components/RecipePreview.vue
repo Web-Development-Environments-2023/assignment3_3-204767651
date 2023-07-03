@@ -4,12 +4,13 @@
     class="recipe-preview"
   >
     <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
-    </div>
-    <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
         {{ recipe.title }}
       </div>
+      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+    </div>
+    <div class="recipe-footer">
+
       <ul class="recipe-overview">
         <li>{{ recipe.readyInMinutes }} minutes</li>
         <li>{{ recipe.aggregateLikes }} likes</li>
@@ -71,11 +72,18 @@ export default {
   height: 100%;
   position: relative;
   margin: 10px 10px;
+  color:black;
 }
 .recipe-preview > .recipe-body {
+  padding: 10px 10px;
   width: 100%;
-  height: 200px;
+  height: auto;
   position: relative;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  left: 0;
 }
 
 .recipe-preview .recipe-body .recipe-image {
@@ -84,11 +92,13 @@ export default {
   margin-top: auto;
   margin-bottom: auto;
   display: block;
-  width: 98%;
-  height: auto;
+  width: 80%;
+  height: 80%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
+  border-radius: 10px;
+  left: 0;
 }
 
 .recipe-preview .recipe-footer {
@@ -106,6 +116,7 @@ export default {
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+
 }
 
 .recipe-preview .recipe-footer ul.recipe-overview {

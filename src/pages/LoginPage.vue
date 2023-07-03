@@ -40,7 +40,7 @@
       <b-button
         type="submit"
         variant="primary"
-        style="width:100px;display:block;"
+        style="width:40%;display:block;"
         class="mx-auto w-100"
         >Login</b-button
       >
@@ -132,6 +132,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2%;
   max-width: 400px;
 }
 </style>

@@ -76,16 +76,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   min-height: 100vh;
+  background: linear-gradient(to left,rgba(255, 255, 255), rgba(141, 184, 133, 0.5), rgba(99, 158, 88, 0.5));
+  
 }
 
 #nav {
   padding: 30px;
   border-bottom: 1px solid #ccc;
+  background: rgb(0, 172, 92);
 }
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #ffffff;
   transition: color 0.3s ease-in-out;
 }
 
@@ -94,7 +97,7 @@ export default {
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #2c3e50;
 }
 
 #reglog {
@@ -121,7 +124,7 @@ export default {
   display: inline-block;
   margin-right: 10px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #ffffff;
   transition: color 0.3s ease-in-out;
 }
 

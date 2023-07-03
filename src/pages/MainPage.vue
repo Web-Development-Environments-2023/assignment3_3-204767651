@@ -3,7 +3,7 @@
     <!-- <h1 class="title">Main Page</h1> -->
     <!-- Left Column -->
     <div class="left-column">
-      <h4 class="column-title">Discover these recipes</h4>
+      <h4 class="column-title">Discover these recipes:</h4>
       <RecipePreviewList ref="randomList"  class="RandomRecipes" />
       <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button>
     </div>
@@ -19,7 +19,9 @@
         ></RecipePreviewList>
       </template>
       <template v-else>
-        <LoginPage></LoginPage>
+        <LoginPage
+        style="margin-top:50%;"
+        ></LoginPage>
       </template>
     </div>
   </div>
@@ -48,15 +50,17 @@ export default {
 .container {
   display: flex;
   justify-content: space-between;
+  margin: 2% auto;
 }
 
 .left-column {
-  flex-basis: 30%;
+  flex-basis: 50%;
   padding-right: 20px;
 }
 
 .right-column {
-  flex-basis: 70%;
+  flex-basis: 50%;
+  // margin-top:15%
 }
 
 .column-title {
@@ -71,5 +75,7 @@ export default {
 
 .more-recipes-button {
   margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 30%;
 }
 </style>
