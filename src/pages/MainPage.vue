@@ -7,8 +7,6 @@
     <!-- <h1 class="title">Main Page</h1> -->
     <!-- Left Column -->
 
-    <!-- <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button> -->
-
     <div class="columns-container">
 
       <div class="left-column">
