@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <b-container>
     <h3>
       {{ title }}
@@ -17,10 +17,7 @@ export default {
     RecipePreview
   },
   props: {
-    title: {
-      type: String,
-      required: false
-    }
+    title: {type: String, required: false}
   },
   data() {
     return {
@@ -62,4 +59,61 @@ export default {
   margin-bottom: 10px;
   
 }
+</style> -->
+
+
+
+<template>
+  <b-container>
+    <h3>
+      {{ title }}
+    </h3>
+    <div class="recipe-column">
+      <RecipePreview v-for="r in recipes" :key="r.id" class="recipePreview" :recipe="r" />
+      <b-button v-if="randomized === true" width="fit-content" class="more-recipes-button" @click="$emit('updateRandom')">More Recipes!</b-button>
+
+    </div>
+  </b-container>
+</template>
+
+<script>
+import RecipePreview from "./RecipePreview.vue";
+export default {
+  name: "RecipePreviewList",
+  components: {
+    RecipePreview
+  },
+  props: {
+    title: {type: String, required: false},
+    recipes: {type: Array, required: true},
+    randomized: {type: Boolean, default: false}
+  },
+  created() {
+    if(!this.recipes || !this.recipes.length ===0) {
+      this.$emit("created")
+    }
+  },
+
+};
+</script>
+
+<style scoped>
+.recipe-column {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.recipePreview {
+  margin-bottom: 10px;
+  
+};
+
+.more-recipes-button {
+  margin-top: 2%;
+  margin-bottom:2% ;
+
+  left: 0;
+}
 </style>
+
