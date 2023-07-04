@@ -17,6 +17,12 @@
       <ul class="recipe-overview">
         <li>{{ recipe.readyInMinutes }} minutes</li>
         <li>{{ recipe.aggregateLikes }} likes</li>
+        <li>{{ recipe.servings }} servings</li>
+        <li v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
+        <li v-if="recipe.vegan"><i class="fas fa-seedling"></i></li>
+
+
+
       </ul>
     </div>
   </router-link>
@@ -184,4 +190,6 @@ export default {
   display: table-cell;
   text-align: center;
 }
+
+@import "~@fortawesome/fontawesome-free/css/all.css";
 </style>

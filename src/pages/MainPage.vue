@@ -24,6 +24,7 @@
       <template v-if="$root.store.username">
         <h2 class="column-title">Recently Viewed Recipes</h2>
         <RecipePreviewList
+          ref="lastWatchedList"
           class="LastViewedRecipes"
           type="lastWatched"
         ></RecipePreviewList>
@@ -51,6 +52,10 @@ export default {
   methods: {
     async randomizeRecipes() {
       await this.$refs.randomList.updateRecipes();
+    },
+
+    async LastViewedRecipes() {
+      await this.$refs.lastWatchedList.updateRecipes();
     },
   },
   mounted() {
