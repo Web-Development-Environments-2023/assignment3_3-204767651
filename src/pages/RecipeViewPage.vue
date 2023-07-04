@@ -81,7 +81,7 @@ export default {
           //   params: { id: this.$route.params.recipeId }
           // }
           `${this.$root.store.server_domain}/recipes/fullDetails/${this.$route.params.recipeId}/`
-        );
+        , {withCredentials: true});
 
         // console.log("response.status", response.status);
         if (response.status !== 200) this.$router.replace("/NotFound");

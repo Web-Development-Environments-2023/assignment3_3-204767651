@@ -20,6 +20,24 @@
         <li>{{ recipe.servings }} servings</li>
         <li v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
         <li v-if="recipe.vegan"><i class="fas fa-seedling"></i></li>
+        <li v-if="recipe.isWatched"><i class="fas fa-eye"></i></li>
+
+        <li v-if="isLoggedIn">
+      <i
+        v-if="recipe.isFavorite"
+        class="fas fa-heart"
+        style="color: rgb(0, 0, 0);"
+      ></i>
+      <i
+        v-else
+        class="far fa-heart"
+        style="color: rgb(0, 0, 0);"
+      ></i>
+    </li>
+
+
+
+  
 
 
 
@@ -41,11 +59,22 @@ export default {
       image_load: false
     };
   },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem("isLoggedIn") === "true";
+    },
+  },
 
   methods: {
     goToRecipe(id) {
       console.log("goToRecipe", id);
       this.$router.push({ name: "recipe", params: { recipeId: id } });
+    },
+
+    async toggleFavorite(recipe) {
+      recipe.isFavorite = !recipe.isFavorite;
+      // Call a method or emit an event to handle the favorite toggle action
+      this.handleFavoriteToggle(recipe);
     }
   },
 
