@@ -99,6 +99,21 @@ export default {
   left: 0;
 }
 
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.recipe-preview .recipe-body:hover .recipe-image {
+  opacity: 0.3;
+}
+
 .recipe-preview .recipe-body .recipe-image {
   margin-left: auto;
   margin-right: auto;
@@ -112,6 +127,12 @@ export default {
   background-size: cover;
   border-radius: 10px;
   left: 0;
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
 }
 
 .recipe-preview .recipe-footer {

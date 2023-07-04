@@ -1,11 +1,21 @@
 <template>
+
   <div class="container">
     <!-- <h1 class="title">Main Page</h1> -->
     <!-- Left Column -->
-    <div class="left-column">
+
+    <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button>
+
+    <div class="columns-container">
+
+      <div class="left-column">
       <h4 class="column-title">Discover these recipes:</h4>
+
       <RecipePreviewList ref="randomList"  class="RandomRecipes" title="" />
-      <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button>
+      <br>
+      <br>
+      <br>
+
     </div>
 
 
@@ -24,6 +34,9 @@
         ></LoginPage>
       </template>
     </div>
+
+    </div>
+
   </div>
 </template>
 
@@ -49,8 +62,15 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin: 2% auto;
+}
+
+.columns-container{
+  display: flex;
+  justify-content: space-between;
+
 }
 
 .left-column {
@@ -74,8 +94,10 @@ export default {
 }
 
 .more-recipes-button {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  margin-left: 30%;
+  margin-top: 2%;
+  margin-bottom:2% ;
+
+  width:fit-content;
+  left: 0;
 }
 </style>
