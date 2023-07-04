@@ -60,8 +60,8 @@ export default {
     };
   },
   async mounted(){
-    await this.getData();
     this.isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    await this.getData();
   },
 
   watch: {
