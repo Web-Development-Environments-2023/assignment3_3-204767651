@@ -29,10 +29,11 @@ export default {
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/info",
-          {
-            params: { id: this.$route.params.recipeId }
-          }
+          // this.$root.store.server_domain + "/recipes/info",
+          // {
+          //   params: { id: this.$route.params.recipeId }
+          // }
+          `${this.$root.store.server_domain}/recipes/fullDetails/${this.$route.params.recipeId}/`
         );
 
         // console.log("response.status", response.status);
@@ -43,17 +44,29 @@ export default {
         return;
       }
 
+      // let {
+      //   analyzedInstructions,
+      //   instructions,
+      //   extendedIngredients,
+      //   aggregateLikes,
+      //   readyInMinutes,
+      //   image,
+      //   title
+      // } = response.data.recipe;
+
+
       let {
-        analyzedInstructions,
         instructions,
-        extendedIngredients,
+        ingredients,
         aggregateLikes,
         readyInMinutes,
         image,
         title
       } = response.data.recipe;
 
-      let _instructions = analyzedInstructions
+
+
+      let _instructions = instructions
         .map((fstep) => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;
@@ -63,8 +76,7 @@ export default {
       let _recipe = {
         instructions,
         _instructions,
-        analyzedInstructions,
-        extendedIngredients,
+        ingredients,
         aggregateLikes,
         readyInMinutes,
         image,

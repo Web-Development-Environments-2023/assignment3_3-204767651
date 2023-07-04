@@ -7,7 +7,10 @@
       <div :title="recipe.title" class="recipe-title">
         {{ recipe.title }}
       </div>
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+      <img 
+      img-alt="Recipe"
+      @click="goToRecipe(recipe.id)"
+      v-if="image_load" :src="recipe.image" class="recipe-image" />
     </div>
     <div class="recipe-footer">
 
@@ -32,6 +35,16 @@ export default {
       image_load: false
     };
   },
+
+  methods: {
+    goToRecipe(id) {
+      console.log("goToRecipe", id);
+      this.$router.push({ name: "recipe", params: { recipeId: id } });
+    }
+  },
+
+
+
   props: {
     recipe: {
       type: Object,

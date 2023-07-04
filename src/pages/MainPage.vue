@@ -4,7 +4,7 @@
     <!-- Left Column -->
     <div class="left-column">
       <h4 class="column-title">Discover these recipes:</h4>
-      <RecipePreviewList ref="randomList"  class="RandomRecipes" />
+      <RecipePreviewList ref="randomList"  class="RandomRecipes" title="" />
       <b-button @click="randomizeRecipes" class="more-recipes-button">More Recipes!</b-button>
     </div>
 
