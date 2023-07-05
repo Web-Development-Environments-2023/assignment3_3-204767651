@@ -59,6 +59,7 @@ export default {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");
       localStorage.setItem("isLoggedIn", false);
+      this.isLoggedIn = false;
 
       this.$router.push("/").catch(() => {
         this.$forceUpdate();

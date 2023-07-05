@@ -25,7 +25,7 @@
         </span>
         <p v-if="recipe.glutenFree">Gluten-Free</p>
         <p>Servings: {{ recipe.servings }}</p>
-        <p>Aggregate Likes: {{ recipe.aggregateLikes }}</p>
+        <p>Likes: {{ recipe.popularity? recipe.popularity : 0 }}</p>
       </div>
     </div>
 
@@ -52,7 +52,6 @@
 
 
 
-        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -103,7 +102,7 @@ export default {
         servings,
         instructions,
         ingredients,
-        aggregateLikes,
+        popularity,
         readyInMinutes,
         image,
         title
@@ -111,28 +110,19 @@ export default {
 
 
 
-      // let _instructions = instructions
-      //   .map((fstep) => {
-      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-      //     return fstep.steps;
-      //   })
-      //   .reduce((a, b) => [...a, ...b], []);
-
       let _recipe = {
         instructions,
-        // _instructions,
         vegetarian,
         vegan,
         glutenFree,
         servings,
         ingredients,
-        aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
+        popularity
       };
 
-      console.log("_recipe", _recipe);
 
       this.recipe = _recipe;
     } catch (error) {
