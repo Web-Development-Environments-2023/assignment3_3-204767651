@@ -6,9 +6,9 @@
               <div class="recipe-image-container" @click="goToRecipe">
                 <img
                   img-alt="Recipe"
-                  v-if="image_load"
                   :src="recipe.image"
                   class="recipe-image"
+
         />
       </div>
       </div>
@@ -27,7 +27,7 @@
               style="padding: 0; border: none; background: none;"
             >
               <i
-                v-if="recipe.isFavorite"
+                v-if="this.isFavorite"
                 class="fas fa-heart"
                 style="color: rgb(15, 143, 68);"
               ></i>
@@ -50,16 +50,18 @@
 
 
 <script>
+
 export default {
   name: "RecipePreview",
   mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
+    // this.axios.get(this.recipe.image).then((i) => {
+    //   this.image_load = true;
+    // });
+    // this.isFavorite = this.recipe.isFavorite;
   },
   data() {
     return {
-      image_load: false,
+      // image_load: false,
       isFavorite: this.recipe.isFavorite
 
     };
@@ -79,21 +81,20 @@ export default {
       this.$router.push({ name: "recipe", params: { recipeId: this.recipe.id } });
     },
 
-    async toggleFavorite() {
-  if (this.$root.store.username && this.recipe.isFavorite===false) {
-      // Update the recipe's favorite status if needed
+async toggleFavorite() {
+  if (this.$root.store.username && !this.isFavorite) {
     this.recipe.isFavorite = !this.recipe.isFavorite;
+    this.isFavorite = true;
     try {
       await this.axios.post(
         this.$root.store.server_domain + "/users/favorites",
-        { recipeId: this.recipe.id },
-        { withCredentials: true }
+        { recipeId: this.recipe.id }
       );
+      this.$emit("favorite-updated", this.recipe); // Emit the event
     } catch (error) {
       this.$root.toast("Input Error", error.message, "danger");
     }
   }
-
 },
 
   },
@@ -106,29 +107,6 @@ export default {
       required: true
     }
 
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
   }
 };
 </script>
@@ -147,6 +125,8 @@ export default {
   background: linear-gradient(to right,rgba(255, 255, 255, 0.1), rgba(141, 184, 133, 0.1), rgba(99, 158, 88, 0.1));
   border-radius: 10px;
   border: none;
+  width: 70%;
+  height: 1000%;
   
 }
 .recipe-preview > .recipe-body {
@@ -177,10 +157,7 @@ export default {
 }
 
 .recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto;
   display: block;
   width: 80%;
   height: 80%;
@@ -190,11 +167,9 @@ export default {
   border-radius: 10px;
   left: 0;
   opacity: 1;
-  display: block;
-  width: 100%;
-  height: auto;
   transition: .5s ease;
   backface-visibility: hidden;
+  cursor: pointer;
 }
 
 .recipe-preview .recipe-footer {

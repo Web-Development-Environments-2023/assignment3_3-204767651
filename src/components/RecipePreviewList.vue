@@ -5,7 +5,10 @@
     </h3>
     <div class="recipe-column">
       <RecipePreview v-for="r in recipes" :key="r.id" class="recipePreview" :recipe="r" />
-      <b-button v-if="randomized === true" width="fit-content" class="more-recipes-button" @click="$emit('updateRandom')">More Recipes!</b-button>
+      <div>
+        <b-button v-if="randomized === true" width="auto" class="more-recipes-button" @click="$emit('updateRandom')">More Recipes!</b-button>
+
+      </div>
 
     </div>
   </b-container>
@@ -36,6 +39,7 @@ export default {
 .recipe-column {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
 }
 
@@ -46,9 +50,7 @@ export default {
 
 .more-recipes-button {
   margin-top: 2%;
-  margin-bottom:2% ;
-
-  left: 0;
+  margin-bottom:2%;
 }
 </style>
 

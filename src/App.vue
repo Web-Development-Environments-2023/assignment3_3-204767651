@@ -57,6 +57,7 @@ export default {
   methods: {
     Logout() {
       this.$root.store.logout();
+      this.$root.isLoggedIn = false;
       this.$root.toast("Logout", "User logged out successfully", "success");
       localStorage.setItem("isLoggedIn", false);
       this.isLoggedIn = false;
@@ -74,6 +75,7 @@ export default {
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

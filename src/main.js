@@ -6,13 +6,17 @@ import axios from "axios";
 import routes from "./routes";
 import VueRouter from "vue-router";
 import VueCookies from "vue-cookies"
-Vue.use(VueCookies)
+Vue.use(VueCookies);
+
+
+
+
+
 
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
 });
-// axios.defaults.withCredentials=true;
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -66,8 +70,11 @@ axios.interceptors.response.use(
 );
 
 Vue.use(VueAxios, axios);
+axios.defaults.withCredentials=true;
 
 Vue.config.productionTip = false;
+
+
 
 const shared_data = {
   server_domain: 'http://localhost:3000',
@@ -78,8 +85,10 @@ const shared_data = {
     console.log("login", this.username);
   },
   logout() {
+    localStorage.setItem("isLoggedIn", false);
     console.log("logout");
     localStorage.removeItem("username");
+    
     this.username = undefined;
   },
 };
