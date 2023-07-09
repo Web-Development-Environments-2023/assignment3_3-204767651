@@ -6,6 +6,8 @@ import axios from "axios";
 import routes from "./routes";
 import VueRouter from "vue-router";
 import VueCookies from "vue-cookies"
+
+
 Vue.use(VueCookies);
 
 
@@ -17,6 +19,7 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
 });
+
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
