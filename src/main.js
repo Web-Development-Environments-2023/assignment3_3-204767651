@@ -7,9 +7,7 @@ import routes from "./routes";
 import VueRouter from "vue-router";
 import VueCookies from "vue-cookies"
 
-
 Vue.use(VueCookies);
-
 
 
 
@@ -91,6 +89,7 @@ const shared_data = {
     localStorage.setItem("isLoggedIn", false);
     console.log("logout");
     localStorage.removeItem("username");
+    localStorage.removeItem("latestSearch");
     
     this.username = undefined;
   },

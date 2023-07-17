@@ -1,10 +1,19 @@
 <template>
-  <b-container>
-    <h3>
+  <div class="container">
+
+    <h2 style="font-weight: bold;">
       {{ title }}
-    </h3>
+    </h2>
+
+
+
+
+  
+  <b-container>
     <div class="recipe-column">
-      <RecipePreview v-for="r in recipes" :key="r.id" class="recipePreview" :recipe="r" />
+      <div v-for="r in recipes" :key="r.id" class="recipe-wrapper">
+        <RecipePreview :recipe="r" class="recipePreview" />
+      </div>
       <div>
         <b-button v-if="randomized === true" width="auto" class="more-recipes-button" @click="$emit('updateRandom')">More Recipes!</b-button>
 
@@ -12,6 +21,7 @@
 
     </div>
   </b-container>
+</div>
 </template>
 
 <script>
@@ -40,17 +50,27 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* align-items: flex-start; */
+
 
 }
 
 .recipePreview {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  display: block;
+
   
-};
+}
+
+.recipe-wrapper {
+  margin-bottom: 10px;
+}
 
 .more-recipes-button {
   margin-top: 2%;
   margin-bottom:2%;
 }
+
+
 </style>
 

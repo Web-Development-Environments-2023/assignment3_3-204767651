@@ -124,6 +124,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   margin: 2% auto;
+  width: 100%;
 
 
 }
@@ -131,6 +132,9 @@ export default {
 .columns-container{
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  margin-left: -10px; /* Adjust the left margin as needed */
+  margin-right: -10px; /* Adjust the right margin as needed */
 
 
 
@@ -139,6 +143,8 @@ export default {
 
 .left-column, .right-column {
   flex-basis: 50%;
+  padding-left: 10px; /* Adjust the left padding as needed */
+  padding-right: 10px; /* Adjust the right padding as needed */
 
 }
 

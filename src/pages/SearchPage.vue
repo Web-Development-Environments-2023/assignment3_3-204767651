@@ -1,10 +1,3 @@
-<!-- <template>
-  <div class="container">
-    <h1 class="title">Search Page</h1>
-  </div>
-</template> -->
-
-
 
 <template>
   <div>
@@ -69,25 +62,31 @@
         <div class="col-12" v-if="searchResults.length === 0">
           <div class="alert alert-info">No results found.</div>
         </div>
-
-        <div class="col-12" v-else>
-          <ul class="list-group">
-            <li v-for="result in searchResults" :key="result.id" class="list-group-item" @click="goToRecipe(result.id)">
-              <img :src="result.image" alt="Recipe Image" class="img-thumbnail">
-              <div>
-                <h4 class="mb-1">{{ result.title }}</h4>
-                <p class="mb-0">{{ result.description }}</p>
-              </div>
-            </li>
-          </ul>
-        </div>
       </div>
+      <!-- Filter Buttons -->
+      <div class="filter-buttons" v-if="searchResults.length > 0">
+        <button class="btn btn-success btn-search" @click="sortByPopularity">Sort by Popularity</button>
+        <button class="btn btn-success btn-search" @click="sortByCookingTime">Sort by Cooking Time</button>
+      </div>
+
+      <div class="resultsPreview">
+
+            <SearchResultPreview 
+            :searchResults="filteredSearchResults" 
+            />
+
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+import SearchResultPreview from "../components/SearchResultPreview.vue";
 export default {
+  name: "SearchPage",
+  components: {
+    SearchResultPreview
+  },
   data() {
     return {
       searchQuery: "",
@@ -156,12 +155,11 @@ export default {
         'Wheat'
       ],
       searchResults: [],
+      filteredSearchResults: []
     };
   },
   methods: {
-    searchRecipes() {
-      // Perform API request to get search results based on the selected parameters
-      // Update this.searchResults with the retrieved results
+    async searchRecipes() {
       const params = {
         query: this.searchQuery,
         numberOfRecipes: this.numberOfRecipes,
@@ -169,13 +167,70 @@ export default {
         diet: this.selectedDiet,
         intolerances: this.selectedIntolerances,
       };
-      console.log(params);
+
+      try{const response = await this.axios.get(this.$root.store.server_domain + "/recipes/search", { params });
+      this.searchResults = response.data;
+
+      if(this.$root.store.username){
+        sessionStorage.setItem("latestSearch", JSON.stringify(params));
+
+      }
+
+    } catch (error) {
+      this.$root.toast("Input Error", error.message, "danger");
+    }
     },
-    goToRecipe(recipeId) {
-      // Navigate to the recipe page using the router (e.g., this.$router.push(`/recipe/${recipeId}`))
+
+    async getLastSearch() {
+      let search_params = JSON.parse(sessionStorage.getItem('latestSearch')) || null;
+      console.log(search_params);
+      if (search_params && this.$root.store.username) {
+        const params = {
+        query: search_params.query,
+        numberOfRecipes: search_params.numberOfRecipes,
+        cuisine: search_params.cuisine,
+        diet: search_params.diet,
+        intolerances: search_params.intolerances,
+      };
+        try{
+          console.log(search_params);
+          const response = await this.axios.get(this.$root.store.server_domain + "/recipes/search", { params });
+          this.searchResults = response.data;
+      
+    } catch (error) {
+      this.$root.toast("Input Error", error.message, "danger");
+    }
+      }
+      
     },
+
     focusSearchBar() {
       document.querySelector('.search-input').focus();
+    },
+    sortByPopularity() {
+      this.filteredSearchResults  = [...this.searchResults].sort((a, b) => b.popularity - a.popularity);
+    },
+
+    sortByCookingTime() {
+      this.filteredSearchResults  = [...this.searchResults].sort((a, b) => a.readyInMinutes - b.readyInMinutes);
+    },
+  },
+  computed: {
+    showFilterButtons() {
+      return this.searchResults.length > 0 && this.filteredResults.length > 0;
+    },
+  },
+
+  mounted() {
+    this.getLastSearch();
+  },
+
+  watch: {
+    searchResults: {
+      immediate: true,
+      handler(newValue) {
+        this.filteredSearchResults = [...newValue];
+      },
     },
   },
 };
@@ -186,7 +241,11 @@ export default {
   margin-top: 2%;
 }
 
-.search-bar{
+.resultsPreview{
+  width: 100%;
+}
+
+.search-bar {
   position: relative;
   background-color: #d6f3e1;
   border-radius: 5px;
@@ -203,8 +262,16 @@ export default {
 .bg-custom {
   background-color: #d6f3e1;
 }
+
+
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.filter-buttons button {
+  margin-right: 0.5rem;
+}
 </style>
-
-
-
-
