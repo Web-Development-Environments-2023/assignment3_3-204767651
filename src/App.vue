@@ -1,50 +1,92 @@
 <template>
   <div id="app">
+    <!-- Navbar -->
     <div id="nav">
-      <router-link :to="{ name: 'main' }">Main Page</router-link>|
-      <router-link :to="{ name: 'search' }">Search</router-link>|
-      <router-link :to="{ name: 'about' }">About</router-link>|
-      <!-- {{ !$root.store.username }} -->
-<div id="personal-dropdown" v-if="$root.store.username" :class="{ active: isPersonalActive }">
-        Personal|
+      <!-- Router Links -->
+      <router-link :to="{ name: 'main' }">Main Page</router-link> |
+      <router-link :to="{ name: 'search' }">Search</router-link> |
+      <router-link :to="{ name: 'about' }">About</router-link> |
+      
+      <!-- Personal dropdown (visible if a username is available) -->
+      <div id="personal-dropdown" v-if="$root.store.username" :class="{ active: isPersonalActive }">
+        Personal |
+        
+        <!-- Dropdown content -->
         <div class="dropdown-content">
           <router-link :to="{ name: 'favorites' }">Favorites Recipes</router-link>
           <router-link :to="{ name: 'myrecipes' }">My Recipes</router-link>
           <router-link :to="{ name: 'familyrecipes' }">Family Recipes</router-link>
         </div>
       </div>
+      
+      <!-- Add Recipe button (visible if a username is available) -->
       <span v-if="$root.store.username">
-        <router-link :to="{ name: 'addrecipe' }">Add Recipe</router-link>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Add Recipe
+        </button>
       </span>
-
-      <!-- {{ !$root.store.username }} -->
+      
+      <!-- Add Recipe Modal -->
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Recipe</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guest and user sections -->
       <div id="reglog">
+        <!-- Guest section -->
         <span v-if="!$root.store.username">
-          <!-- Guest: -->
           <div id="guest">
             <h5>Hello Guest:</h5>
           </div>
           <div id="reglog-links">
-            <router-link :to="{ name: 'register' }">Register</router-link>|
-            <router-link :to="{ name: 'login' }">Login</router-link>|
+            <router-link :to="{ name: 'register' }">Register</router-link> |
+            <router-link :to="{ name: 'login' }">Login</router-link> |
           </div>
         </span>
+        
+        <!-- User section -->
         <span v-else>
           <div id="user">
             <span class="username">{{ $root.store.username }}</span>
-            <button @click="Logout" class="logout-button">Logout</button>
+            <button @click="logout" class="logout-button">Logout</button>
           </div>
         </span>
       </div>
     </div>
+    
+    <!-- Router View -->
     <router-view />
+
+
   </div>
 </template>
 
-
 <script>
+import AddRecipeModal from "./pages/AddRecipeModal.vue";
+
 export default {
   name: "App",
+  data() {
+    return {
+      showAddRecipeModal: false,
+    };
+  },
   computed: {
     isPersonalActive() {
       return (
@@ -55,18 +97,28 @@ export default {
     },
   },
   methods: {
-    Logout() {
+    logout() {
       this.$root.store.logout();
       this.$root.isLoggedIn = false;
       this.$root.toast("Logout", "User logged out successfully", "success");
       localStorage.setItem("isLoggedIn", false);
       this.isLoggedIn = false;
-
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
-    }
-  }
+    },
+    openAddRecipeModal() {
+      this.showAddRecipeModal = true;
+      console.log("openAddRecipeModal");
+      console.log(this.showAddRecipeModal);
+    },
+    closeAddRecipeModal() {
+      this.showAddRecipeModal = false;
+    },
+  },
+  components: {
+    //AddRecipeModal,
+  },
 };
 </script>
 
@@ -216,6 +268,109 @@ export default {
   display: block;
   /* Cancel the transition delay when hovering over the dropdown content */
   transition-delay: 0s;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close {
+  background-color: #ccc;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: 0;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 15px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+}
+
+.close:hover {
+  color: #000;
+  text-decoration: none;
+  opacity: 0.75;
 }
 
 

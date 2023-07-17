@@ -53,11 +53,11 @@ const routes = [
     name: 'familyrecipes',
     component: () => import('./pages/FamilyRecipesPage.vue'),
   },
-  {
-    path: '/addrecipe',
-    name: 'addrecipe',
-    component: () => import('./pages/AddRecipePage.vue'),
-  },
+  // {
+  //   path: '/addrecipe',
+  //   name: 'addrecipe',
+  //   component: () => import('./pages/AddRecipePage.vue'),
+  // },
 
 
 ];
