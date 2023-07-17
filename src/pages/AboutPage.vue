@@ -26,7 +26,6 @@
         <h2 class="developers-title">Meet the Developers</h2>
         <div class="developer">
           <div class="developer-image">
-            <img src="path-to-student1-image.jpg" alt="Student 1">
           </div>
           <div class="developer-info">
             <h3 class="developer-name">Student 1</h3>
@@ -38,7 +37,6 @@
         </div>
         <div class="developer">
           <div class="developer-image">
-            <img src="path-to-student2-image.jpg" alt="Student 2">
           </div>
           <div class="developer-info">
             <h3 class="developer-name">Student 2</h3>
@@ -101,19 +99,7 @@ export default {
   margin-bottom: 1rem;
 }
 
-.developer-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 1rem;
-}
 
-.developer-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .developer-info {
   flex-grow: 1;

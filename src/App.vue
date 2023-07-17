@@ -22,7 +22,7 @@
       <!-- Add Recipe button (visible if a username is available) -->
       <span v-if="$root.store.username">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" id="modalBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Add Recipe
         </button>
       </span>
@@ -41,7 +41,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-success">Save changes</button>
             </div>
           </div>
         </div>
@@ -103,6 +103,7 @@ export default {
       this.$root.toast("Logout", "User logged out successfully", "success");
       localStorage.setItem("isLoggedIn", false);
       this.isLoggedIn = false;
+      sessionStorage.clear();
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
@@ -139,8 +140,8 @@ export default {
 #nav {
   padding: 30px;
   border-bottom: 1px solid #ccc;
-  background: rgb(0, 172, 92);
-}
+  // background: rgb(0, 172, 92);
+  background: linear-gradient(90deg, rgb(105, 189, 150) 0%, rgba(0, 172, 92, 1) 35%, rgb(64, 156, 99) 100%);}
 
 #nav a {
   font-weight: bold;
@@ -149,7 +150,7 @@ export default {
 }
 
 #nav a:hover {
-  color: #0c99f7;
+  color: #4c687a;
 }
 
 #nav a.router-link-exact-active {
@@ -185,7 +186,7 @@ export default {
 }
 
 #personal-dropdown:hover {
-  color: #0c99f7;
+  color: #52768f;
   text-decoration: underline;
 }
 
@@ -214,7 +215,7 @@ export default {
 }
 
 #personal-dropdown .dropdown-content a:hover {
-  color: #0c99f7;
+  color: #43b680;
   text-decoration: underline;
 }
 
@@ -226,7 +227,7 @@ export default {
 }
 
 #personal-dropdown.active {
-  color: #42b983;
+  color: #2c3e50;
 }
 
 #guest {
@@ -243,6 +244,20 @@ export default {
   vertical-align: middle;
 }
 
+#modalBtn{
+  background-color: #42b983;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#modalBtn:hover {
+  background-color: #1d9b51;
+}
+
 .username {
   font-weight: bold;
   margin-right: 10px;
@@ -255,6 +270,11 @@ export default {
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  background-color: #74797e;
 }
 
 
