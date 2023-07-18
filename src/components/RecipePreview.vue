@@ -12,7 +12,6 @@
         </div>
         <img
           :src="recipe.image"
-          alt="Recipe"
           class="recipe-image"
           @load="handleImageLoad"
         />
@@ -27,7 +26,7 @@
           <li data-placement="top" title="vegetarian" v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
           <li data-placement="top" title="vegan" v-if="recipe.vegan"><i class="fas fa-seedling" style = "color: rgb(15, 143, 68)"></i></li>
           <li v-if="recipe.isWatched"><i class="fas fa-eye"></i></li>
-          <li v-if="this.$root.store.username">
+          <li class="fav-btn" v-if="this.$root.store.username">
             <button
               @click="toggleFavorite()"
               class="btn btn-link"
@@ -208,11 +207,16 @@ async toggleFavorite() {
   opacity: 0.3;
 }
 
+.fav-btn{
+  transition: 0.3s;
+}
+
+.fav-btn:hover{
+  opacity: 0.5;
+}
+
 
 .recipe-footer {
-  /* width: 100%;
-  height: 50%;
-  overflow: hidden; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -248,6 +252,7 @@ async toggleFavorite() {
   text-align: center;
   padding: 3px;
 }
+
 
 @import "~@fortawesome/fontawesome-free/css/all.css";
 </style>

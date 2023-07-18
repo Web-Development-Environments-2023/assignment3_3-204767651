@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="title">Register</h1>
-    <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
+    <b-form class="fields" @submit.prevent="onRegister" @reset.prevent="onReset">
       <b-form-group
         id="input-group-username"
         label-cols-sm="3"
@@ -12,6 +12,7 @@
           id="username"
           v-model="$v.form.username.$model"
           type="text"
+          class="custom-input"
           :state="validateState('username')"
         ></b-form-input>
         <b-form-invalid-feedback v-if="!$v.form.username.required">
@@ -33,6 +34,7 @@
       >
         <b-form-select
           id="country"
+          class="custom-input"
           v-model="$v.form.country.$model"
           :options="countries"
           :state="validateState('country')"
@@ -48,9 +50,10 @@
         label="Password:"
         label-for="password"
       >
-        <b-form-input
+        <!-- <b-form-input
           id="password"
           type="password"
+          class="custom-input"
           v-model="$v.form.password.$model"
           :state="validateState('password')"
         ></b-form-input>
@@ -65,7 +68,31 @@
           v-if="$v.form.password.required && !$v.form.password.length"
         >
           Have length between 5-10 characters long
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
+        <b-form-input
+      id="password"
+      type="password"
+      class="custom-input"
+      v-model="$v.form.password.$model"
+      :state="validateState('password')"
+    ></b-form-input>
+    <b-form-invalid-feedback v-if="!$v.form.password.required">
+      Password is required
+    </b-form-invalid-feedback>
+    <b-form-text v-else-if="$v.form.password.$error" text-variant="info">
+      Your password should be <strong>strong</strong>. <br />
+      For that, your password should contains at least one character and one number
+    </b-form-text>
+    <b-form-invalid-feedback
+      v-if="$v.form.password.required && !$v.form.password.length"
+    >
+      Have length between 5-10 characters long
+    </b-form-invalid-feedback>
+    <b-form-invalid-feedback
+      v-else-if="!$v.form.password.$params.customValidation"
+    >
+      Password must contain at least one character and one number
+    </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
@@ -77,6 +104,7 @@
         <b-form-input
           id="confirmedPassword"
           type="password"
+          class="custom-input"
           v-model="$v.form.confirmedPassword.$model"
           :state="validateState('confirmedPassword')"
         ></b-form-input>
@@ -90,15 +118,15 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="reset">Reset</b-button>
       <b-button
         type="submit"
-        variant="primary"
+        variant="success"
         style="width:250px;"
         class="ml-5 w-75"
         >Register</b-button
       >
-      <div class="mt-2">
+      <div class="mt-2 text-center">
         You have an account already?
         <router-link to="login"> Log in here</router-link>
       </div>
@@ -112,10 +140,6 @@
     >
       Register failed: {{ form.submitError }}
     </b-alert>
-    <!-- <b-card class="mt-3 md-3" header="Form Data Result">
-      <pre class="m-0"><strong>form:</strong> {{ form }}</pre>
-      <pre class="m-0"><strong>$v.form:</strong> {{ $v.form }}</pre>
-    </b-card> -->
   </div>
 </template>
 
@@ -127,7 +151,7 @@ import {
   maxLength,
   alpha,
   sameAs,
-  email
+  helpers
 } from "vuelidate/lib/validators";
 
 export default {
@@ -161,7 +185,12 @@ export default {
       },
       password: {
         required,
-        length: (p) => minLength(5)(p) && maxLength(10)(p)
+        length: (p) => minLength(5)(p) && maxLength(10)(p),
+        customValidation: helpers.regex(
+          "password",
+          /^(?=.*[a-zA-Z])(?=.*\d).*$/,
+          "Password must contain at least one character and one number"
+        )
       },
       confirmedPassword: {
         required,
@@ -227,4 +256,11 @@ export default {
 .container {
   max-width: 500px;
 }
+.custom-input {
+  background-color: #d6f3e1;
+  border-color: #95a19c; /* Change the border color of the input boxes */
+  color: #333; /* Change the text color of the input boxes */
+}
+
+
 </style>

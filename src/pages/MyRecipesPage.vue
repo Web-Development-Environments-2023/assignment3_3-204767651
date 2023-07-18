@@ -4,9 +4,8 @@
 
     <div class="resultsPreview">
 
-    <SearchResultPreview 
-    :searchResults="recipe_list" 
-    />
+    <PersonalRecipePreview v-for="recipe in recipe_list" :key="recipe.id" :recipe="recipe" />
+
 
 </div>
     
@@ -15,11 +14,11 @@
 </template>
 
 <script>
-import SearchResultPreview from "../components/SearchResultPreview.vue";
+import PersonalRecipePreview from "../components/PersonalRecipePreview.vue";
 export default {
   name: 'myrecipes',
   components: {
-  SearchResultPreview
+  PersonalRecipePreview
 },
 data(){
   return{
@@ -34,7 +33,7 @@ methods:{
   async getFavorites(){
     try{
       const response = await this.axios.get(this.$root.store.server_domain + "/users/myrecipes");
-      this.favorite_list = response.data;
+      this.recipe_list = response.data;
     }
     catch(error){
       this.$root.toast("Input Error", error.message, "danger");

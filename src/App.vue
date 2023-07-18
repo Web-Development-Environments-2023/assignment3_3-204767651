@@ -30,25 +30,65 @@
         </button>
       </span>
       
-      <!-- Add Recipe Modal -->
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Recipe</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-success">Save changes</button>
-            </div>
-          </div>
-        </div>
+
+<!-- Add Recipe Modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Recipe</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        <form id="recipeForm" @submit="saveRecipe">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" id="title" v-model="form.title" required>
+          </div>
+          <div class="mb-3">
+            <label for="cookingTime" class="form-label">Cooking Time (minutes):</label>
+            <input type="number" class="form-control" id="cookingTime" v-model="form.cookingTime" required>
+          </div>
+          <div class="mb-3">
+            <label for="imageURL" class="form-label">Image URL:</label>
+            <input type="text" class="form-control" id="imageURL" v-model="form.imageURL">
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="vegan" v-model="form.vegan">
+            <label class="form-check-label" for="vegan">Vegan</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="vegetarian" v-model="form.vegetarian">
+            <label class="form-check-label" for="vegetarian">Vegetarian</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="glutenFree" v-model="form.glutenFree">
+            <label class="form-check-label" for="glutenFree">Gluten-Free</label>
+          </div>
+          <div class="mb-3">
+            <label for="servings" class="form-label">Servings:</label>
+            <input type="number" class="form-control" id="servings" v-model="form.servings" required>
+          </div>
+          <div class="mb-3">
+            <label for="instructions" class="form-label">Instructions:</label>
+            <textarea class="form-control" id="instructions" rows="4" v-model="form.instructions"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="ingredients" class="form-label">Ingredients:</label>
+            <textarea class="form-control" id="ingredients" rows="4" v-model="form.ingredients"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
       
       <!-- Guest and user sections -->
       <div id="reglog">
@@ -80,8 +120,6 @@
     <!-- Footer -->
     <footer>
       <div class="footer_container">
-        <!-- <p>Developed by </p>
-      <span><i class="fab fa-github" href="https://github.com/idolou">Ido Lourie</i></span>  -->
       <p>Developed by <a href="https://github.com/idolou" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a> Ido Lourie - <a href="https://github.com/EladShmulevich" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a> Elad Shmulevich</p>
       </div>
     </footer>
@@ -99,6 +137,18 @@ export default {
   data() {
     return {
       showAddRecipeModal: false,
+      form: {
+      title: '',
+      cookingTime: null,
+      imageURL: '',
+      popularity: null,
+      vegan: false,
+      vegetarian: false,
+      glutenFree: false,
+      servings: null,
+      instructions: '',
+      ingredients: ''
+    },
     };
   },
   computed: {
@@ -130,6 +180,48 @@ export default {
     closeAddRecipeModal() {
       this.showAddRecipeModal = false;
     },
+
+    async saveRecipe() {
+      console.log(this.form.imageURL);
+    try {
+      // Prepare the data to be sent
+      const recipeData = {
+        title: this.form.title,
+        cooking_time: this.form.cookingTime,
+        image_url: this.form.imageURL,
+        vegan: this.form.vegan,
+        vegetarian: this.form.vegetarian,
+        gluten_free: this.form.glutenFree,
+        servings: this.form.servings,
+        instructions: this.form.instructions,
+        ingredients: this.form.ingredients
+      };
+
+      // Send the data to your backend API
+      const response = await this.axios.post(this.$root.store.server_domain +'/users/myrecipes', recipeData);
+      
+      // Handle the response
+      console.log('Recipe saved:', response.data);
+      this.$root.toast("Rcipe saved","good luck", "success");
+
+      
+      // Reset the form
+      this.form = {
+        title: '',
+        cookingTime: null,
+        imageURL: '',
+        vegan: false,
+        vegetarian: false,
+        glutenFree: false,
+        servings: null,
+        instructions: '',
+        ingredients: ''
+      };
+
+    } catch (error) {
+      this.$root.toast("Failed to save recipe", error.message, "danger");
+    }
+  }
   },
   components: {
     //AddRecipeModal,
@@ -320,6 +412,7 @@ export default {
   align-items: center;
   justify-content: center;
   z-index: 999;
+
 }
 
 .modal-content {
@@ -329,6 +422,8 @@ export default {
   margin: 0 auto;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to left,rgb(146, 199, 164), rgba(141, 184, 133, 0.5), rgba(99, 158, 88, 0.5));
+
 }
 
 .modal-close {
@@ -383,6 +478,7 @@ export default {
 }
 
 .modal-body {
+
   position: relative;
   flex: 1 1 auto;
   padding: 15px;

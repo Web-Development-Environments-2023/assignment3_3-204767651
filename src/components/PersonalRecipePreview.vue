@@ -18,21 +18,23 @@
         </div>
         <div class="recipe-footer">
           <ul class="recipe-overview">
-            <li>{{ recipe.recipe_owner }} recipe</li>
-            <li>for {{ recipe.when_cooking }} </li>
+            <li>{{ recipe.cooking_time }} minutes</li>
+            <li>{{ recipe.servings ? recipe.servings + " servings" : "" }} </li>
+            <li data-placement="top" title="vegetarian" v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
+            <li data-placement="top" title="vegan" v-if="recipe.vegan"><i class="fas fa-seedling" style = "color: rgb(15, 143, 68)"></i></li>
           </ul>
         </div>
         <div class="recipe-instructions">
             <h5>Instructions:</h5>
             <!-- <p>{{ recipe.instructions }}</p> -->
             <ul>
-                    <li v-for="instruction in recipe.Instructions.split('\n')" :key="instruction">{{ instruction }}</li>
+                    <li v-for="instruction in recipe.instructions.split('\n')" :key="instruction">{{ instruction }}</li>
                 </ul>
           </div>
           <div class="recipe-ingredients">
             <h5>Ingredients:</h5>
             <ul>
-                    <li v-for="ingredient in recipe.Ingredients.split('\n')" :key="ingredient">{{ ingredient }}</li>
+                    <li v-for="ingredient in recipe.ingredients.split('\n')" :key="ingredient">{{ ingredient }}</li>
                 </ul>
           </div>
       </b-card>
@@ -41,7 +43,7 @@
   
   <script>
   export default {
-    name: "FamilyRecipePreview",
+    name: "PersonalRecipePreview",
     data() {
       return {
         imageLoaded: false,

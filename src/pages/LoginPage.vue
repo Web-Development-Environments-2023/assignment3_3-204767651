@@ -13,6 +13,7 @@
           id="Username"
           v-model="$v.form.username.$model"
           type="text"
+          class="custom-input"
           :state="validateState('username')"
         ></b-form-input>
         <b-form-invalid-feedback>
@@ -29,17 +30,19 @@
         <b-form-input
           id="Password"
           type="password"
+          class="custom-input"
           v-model="$v.form.password.$model"
           :state="validateState('password')"
         ></b-form-input>
         <b-form-invalid-feedback>
           Password is required
         </b-form-invalid-feedback>
+
       </b-form-group>
 
       <b-button
         type="submit"
-        variant="primary"
+        variant="success"
         style="width:40%;display:block;"
         class="mx-auto w-100"
         >Login</b-button
@@ -65,7 +68,7 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required} from "vuelidate/lib/validators";
 export default {
   name: "Login",
   data() {
@@ -83,7 +86,7 @@ export default {
         required
       },
       password: {
-        required
+        required,
       }
     }
   },
@@ -137,5 +140,10 @@ export default {
   flex-direction: column;
   padding-top: 2%;
   max-width: 400px;
+}
+.custom-input {
+  background-color: #d6f3e1;
+  border-color: #95a19c; /* Change the border color of the input boxes */
+  color: #333; /* Change the text color of the input boxes */
 }
 </style>
