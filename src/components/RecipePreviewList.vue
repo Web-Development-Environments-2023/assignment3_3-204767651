@@ -1,27 +1,27 @@
 <template>
   <div class="container">
+    <h2 style="font-weight: bold;">{{ title }}</h2>
 
-    <h2 style="font-weight: bold;">
-      {{ title }}
-    </h2>
+    <b-container>
+      <div class="recipe-column">
+        <div v-for="r in recipes" :key="r.id" class="recipe-wrapper">
+          <RecipePreview :recipe="r" class="recipePreview" />
+        </div>
 
-
-
-
-  
-  <b-container>
-    <div class="recipe-column">
-      <div v-for="r in recipes" :key="r.id" class="recipe-wrapper">
-        <RecipePreview :recipe="r" class="recipePreview" />
+        <div class="button-wrapper">
+          <b-button
+            v-if="randomized === true"
+            width="auto"
+            class="more-recipes-button"
+            variant="success"
+            @click="$emit('updateRandom')"
+          >
+            More Recipes!
+          </b-button>
+        </div>
       </div>
-      <div>
-        <b-button v-if="randomized === true" width="auto" class="more-recipes-button" @click="$emit('updateRandom')">More Recipes!</b-button>
-
-      </div>
-
-    </div>
-  </b-container>
-</div>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -45,32 +45,26 @@ export default {
 };
 </script>
 
-<style scoped>
+
+ <style scoped>
 .recipe-column {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* align-items: flex-start; */
-
-
 }
 
 .recipePreview {
-  /* margin-bottom: 10px; */
   display: block;
-
-  
 }
 
 .recipe-wrapper {
   margin-bottom: 10px;
 }
 
-.more-recipes-button {
+.button-wrapper {
+  display: flex;
+  justify-content: center;
   margin-top: 2%;
-  margin-bottom:2%;
+  margin-bottom: 2%;
 }
-
-
 </style>
-

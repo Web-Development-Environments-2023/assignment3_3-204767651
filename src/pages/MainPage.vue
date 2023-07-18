@@ -10,7 +10,6 @@
     <div class="columns-container">
 
       <div class="left-column">
-      <!-- <h4 class="column-title">Discover these recipes:</h4> -->
 
       <RecipePreviewList class="RandomRecipes" title="Discover these recipes:" 
       :recipes="randomRecipes || []"
@@ -24,7 +23,6 @@
     <!-- Right Column -->
     <div class="right-column">
       <template v-if="$root.store.username">
-        <!-- <h2 class="column-title">Recently Viewed Recipes</h2> -->
         <RecipePreviewList
             title="Recently Viewed Recipes:"
           :recipes="lastViewedRecipes || []"

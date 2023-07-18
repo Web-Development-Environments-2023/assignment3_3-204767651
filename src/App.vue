@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div id="content">
+
+   
     <!-- Navbar -->
     <div id="nav">
       <!-- Router Links -->
@@ -52,7 +55,7 @@
         <!-- Guest section -->
         <span v-if="!$root.store.username">
           <div id="guest">
-            <h5>Hello Guest:</h5>
+            <h5 style="font-weight: bold;" >Hello Guest:</h5>
           </div>
           <div id="reglog-links">
             <router-link :to="{ name: 'register' }">Register</router-link> |
@@ -72,6 +75,17 @@
     
     <!-- Router View -->
     <router-view />
+
+  </div>
+    <!-- Footer -->
+    <footer>
+      <div class="footer_container">
+        <!-- <p>Developed by </p>
+      <span><i class="fab fa-github" href="https://github.com/idolou">Ido Lourie</i></span>  -->
+      <p>Developed by <a href="https://github.com/idolou" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a> Ido Lourie - <a href="https://github.com/EladShmulevich" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a> Elad Shmulevich</p>
+      </div>
+    </footer>
+
 
 
   </div>
@@ -134,6 +148,8 @@ export default {
   color: #2c3e50;
   min-height: 100vh;
   background: linear-gradient(to left,rgba(255, 255, 255), rgba(141, 184, 133, 0.5), rgba(99, 158, 88, 0.5));
+  display: flex;
+  flex-direction: column;
   
 }
 
@@ -232,11 +248,13 @@ export default {
 
 #guest {
   display: inline-block;
+  font-weight: bold;
+  font-size: 1.5em;
 }
 
 #reglog-links {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 0.2em;
 }
 
 #user {
@@ -262,6 +280,7 @@ export default {
   font-weight: bold;
   margin-right: 10px;
 }
+
 
 .logout-button {
   background-color: #42b983;
@@ -392,6 +411,31 @@ export default {
   text-decoration: none;
   opacity: 0.75;
 }
+#content {
+  flex-grow: 1;
+}
+
+footer {
+  background: linear-gradient(to right,rgb(51, 134, 78), rgba(35, 126, 19, 0.5), rgba(20, 109, 150, 0.4));
+  margin-top: auto;
+
+  color: #ffffff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer i {
+  vertical-align: middle;
+}
 
 
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0 5px;
+}
 </style>

@@ -26,26 +26,62 @@
         <h2 class="developers-title">Meet the Developers</h2>
         <div class="developer">
           <div class="developer-image">
+            <img src="https://pbs.twimg.com/profile_images/1337383329092542464/KtwzaP1Z_400x400.jpg" alt="Ido Lourie" />
           </div>
           <div class="developer-info">
-            <h3 class="developer-name">Student 1</h3>
+            <h3 class="developer-name">Ido Lourie</h3>
             <p class="developer-description">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              ultrices, neque in aliquam posuere, ipsum lorem mattis nisi.
+              3rd year student at Ben Gurion University of the Negev, studying
+              Information Systems Engineering.
             </p>
+            <div class="social-icons">
+              <a href="https://www.linkedin.com/in/ido-lourie/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href="https://github.com/idolou" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
           </div>
         </div>
         <div class="developer">
           <div class="developer-image">
+            <img src="https://media.licdn.com/dms/image/C4D03AQGU1KBxYr2J5g/profile-displayphoto-shrink_200_200/0/1650380339601?e=1695254400&v=beta&t=1p0zZsFLF5UBu3JWXuTd_zy8GI8IfJTPmO4OSWCg5f4" alt="Ido Lourie" />
+
           </div>
           <div class="developer-info">
-            <h3 class="developer-name">Student 2</h3>
+            <h3 class="developer-name">Elad Shmulevich</h3>
             <p class="developer-description">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              ultrices, neque in aliquam posuere, ipsum lorem mattis nisi.
+              3rd year student at Ben Gurion University of the Negev, studying
+              Information Systems Engineering.
             </p>
+            <div class="social-icons">
+              <a href="https://www.linkedin.com/in/elad-shmulevich-information-system-engineering/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href="https://github.com/EladShmulevich" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
           </div>
         </div>
+        <div class="previous-projects-section">
+        <h2 class="previous-projects-title">Previous Projects</h2>
+        <ul class="previous-projects-list">
+          <li class="previous-project">
+            <h3 class="previous-project-title" href="https://idolou.github.io/"><a href="https://idolou.github.io/" target="_blank" rel="noopener noreferrer">Space Invaders Web Game</a></h3>
+            
+            
+            <p class="previous-project-description">
+            </p>
+          </li>
+
+        </ul>
+      </div>
+
+
+
+        
       </div>
     </div>
   </div>
@@ -59,7 +95,11 @@ export default {
 
 <style scoped>
 .about-page {
-  margin: 2rem;
+  display: flex;
+  justify-content: center;
+  padding-top: 2em;
+
+  
 }
 
 .box {
@@ -73,7 +113,7 @@ export default {
     rgba(99, 158, 88, 0.1)
   );
   border-radius: 10px;
-  width: 80%;
+  width: 70%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -85,6 +125,9 @@ export default {
 
 .about-description {
   line-height: 1.5;
+  font-size: 1.3rem;
+  width: 70%;
+
 }
 
 .developers-title {
@@ -96,10 +139,25 @@ export default {
 .developer {
   display: flex;
   align-items: center;
+  padding: 1em;
   margin-bottom: 1rem;
+
 }
 
+.developer-image {
+  /* Add styles for developer image */
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  overflow: hidden;
+}
 
+.developer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .developer-info {
   flex-grow: 1;
@@ -109,9 +167,77 @@ export default {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  padding-left: 1em;
+
 }
 
 .developer-description {
   line-height: 1.5;
+  padding-left: 1em;
+  font-size: 1.3rem;
+
 }
+
+.social-icons {
+  margin-top: 0.5rem;
+  padding-left: 1em;
+}
+
+.social-icons a {
+  margin-right: 0.5rem;
+  color: #000;
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+}
+
+.previous-projects-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.previous-projects-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 1em;
+  color: #000;
+
+}
+
+.previous-project {
+  margin-bottom: 1rem;
+}
+
+.previous-project-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.previous-project-description {
+  line-height: 1.5;
+}
+
+a:link {
+  color: rgb(36, 49, 36);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: rgb(8, 75, 19);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(65, 57, 57);
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+
 </style>

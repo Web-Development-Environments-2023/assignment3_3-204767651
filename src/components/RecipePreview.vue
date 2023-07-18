@@ -1,4 +1,5 @@
       <template>
+        <div class="container">
           <b-card class="recipe-preview">
             <div class="recipe-body">
               <div :title="recipe.title" class="recipe-title" @click="goToRecipe">{{ recipe.title }}</div>
@@ -21,10 +22,10 @@
       <div class="recipe-footer">
         <ul class="recipe-overview">
           <li>{{ recipe.readyInMinutes }} minutes</li>
-          <li>{{ recipe.popularity }} likes</li>
+          <li>{{ recipe.popularity || recipe.aggregateLikes}} likes</li>
           <li>{{ recipe.servings ? recipe.servings + " servings" : "" }} </li>
-          <li v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
-          <li v-if="recipe.vegan"><i class="fas fa-seedling" style = "color: rgb(15, 143, 68)"></i></li>
+          <li data-placement="top" title="vegetarian" v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
+          <li data-placement="top" title="vegan" v-if="recipe.vegan"><i class="fas fa-seedling" style = "color: rgb(15, 143, 68)"></i></li>
           <li v-if="recipe.isWatched"><i class="fas fa-eye"></i></li>
           <li v-if="this.$root.store.username">
             <button
@@ -51,6 +52,7 @@
         </ul>
       </div>
     </b-card>
+  </div>
 </template>
 
 
@@ -122,6 +124,7 @@ async toggleFavorite() {
 
 <style scoped>
 
+
 .recipe-preview {
   margin: 3%;
   color: black;
@@ -133,13 +136,28 @@ async toggleFavorite() {
   );
   border-radius: 10px;
   border: none;
-  width: 70%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: 0.3s;
+  width: 100%;
+  height: 100%;
+
+  
+  
 }
 
 .recipe-preview:hover {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.recipe-title{
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.recipe-title:hover {
+  opacity: 0.5;
 }
 
 .recipe-preview > .recipe-body {
@@ -151,11 +169,13 @@ async toggleFavorite() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
 }
 
 .recipe-preview .recipe-image-container {
   position: relative;
-  height: 200px;
+  padding-top: 2%;
+  /* height: 200px; */
 }
 
 .middle {
@@ -171,7 +191,8 @@ async toggleFavorite() {
 .recipe-preview .recipe-body .recipe-image {
   margin: auto;
   display: block;
-  width: 80%;
+  width: 100%;
+  object-fit: cover;
   height: 80%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -189,9 +210,16 @@ async toggleFavorite() {
 
 
 .recipe-footer {
-  width: 100%;
+  /* width: 100%;
   height: 50%;
+  overflow: hidden; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+  padding-top: 2%;
+  
 }
 
 .recipe-footer .recipe-title {
@@ -202,6 +230,8 @@ async toggleFavorite() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+
 }
 
 .recipe-footer ul.recipe-overview {
@@ -215,8 +245,8 @@ async toggleFavorite() {
 
 .recipe-footer ul.recipe-overview li {
   flex-grow: 1;
-  width: 90px;
   text-align: center;
+  padding: 3px;
 }
 
 @import "~@fortawesome/fontawesome-free/css/all.css";
