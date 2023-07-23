@@ -1,6 +1,5 @@
 import Main from "./pages/MainPage";
 import NotFound from "./pages/NotFoundPage";
-// import AboutPage from "./pages/AboutPage.vue";
 
 const routes = [
   {
@@ -53,11 +52,6 @@ const routes = [
     name: 'familyrecipes',
     component: () => import('./pages/FamilyRecipesPage.vue'),
   },
-  // {
-  //   path: '/addrecipe',
-  //   name: 'addrecipe',
-  //   component: () => import('./pages/AddRecipePage.vue'),
-  // },
 
 
 ];

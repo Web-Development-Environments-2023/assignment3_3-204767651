@@ -81,7 +81,7 @@ export default {
   flex-wrap: wrap;
   margin-right: -0.5rem;
   margin-left: -0.5rem;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -136,6 +136,7 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
   margin: 0 0.5rem;
+  border-radius: 3px;
 }
 
 .page-btn.active {
@@ -145,5 +146,7 @@ export default {
 .page-btn:hover {
   background-color: #1d9b51;
 }
+
+
 </style>
 

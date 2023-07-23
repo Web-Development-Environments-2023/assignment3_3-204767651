@@ -84,11 +84,22 @@ export default {
   methods: {
     goToRecipe() {
       console.log("goToRecipe", this.recipe.id);
+      this.recipe.isWatched = true;
+      let saved_last_viewed = JSON.parse(sessionStorage.getItem("lastViewed"));
+      if (saved_last_viewed){
+        saved_last_viewed.push(this.recipe);
+        sessionStorage.setItem("lastViewed", JSON.stringify(saved_last_viewed));
+      }
+      else{
+        sessionStorage.setItem("lastViewed", JSON.stringify([this.recipe]));
+      }
+
+
+
       this.$router.push({ name: "recipe", params: { recipeId: this.recipe.id } });
     },
     handleImageLoad() {
       this.imageLoaded = true;
-      console.log(this.recipe);
     },
 
 async toggleFavorite() {
@@ -98,12 +109,45 @@ async toggleFavorite() {
     try {
       await this.axios.post(
         this.$root.store.server_domain + "/users/favorites",
-        { recipeId: this.recipe.id }
+        { recipeId: this.recipe.id },
+        {withCredentials: true}
       );
+
+        //change the session storage to reflect the change
+        let saved_details = JSON.parse(sessionStorage.getItem("recipe-"+this.recipe.id));
+
+      if (saved_details){
+        saved_details.isFavorite = true;
+        sessionStorage.setItem("recipe-"+this.$route.params.recipeId, JSON.stringify(saved_details));
+      }
+
+      //change the session storage to reflect the change
+      let randomRecipes = JSON.parse(sessionStorage.getItem("randomRecipes"));
+      if (randomRecipes){
+        randomRecipes.forEach((recipe) => {
+          if (recipe.id === this.recipe.id){
+            recipe.isFavorite = true;
+          }
+        });
+        sessionStorage.setItem("randomRecipes", JSON.stringify(randomRecipes));
+      }
+
+
       this.$emit("favorite-updated", this.recipe); // Emit the event
     } catch (error) {
-      this.$root.toast("Input Error", error.message, "danger");
+      this.$root.toast("Input Error", "Recipe already marked as favorite", "success");
     }
+
+    try{
+        const response = await this.axios.get(this.$root.store.server_domain + "/users/favorites");
+        sessionStorage.setItem("favorites", JSON.stringify(response.data));
+
+      }
+      catch(error){
+        this.$root.toast("Input Error", error.message, "danger");
+      }
+
+
   }
 },
 

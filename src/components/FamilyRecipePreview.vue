@@ -26,13 +26,13 @@
             <h5>Instructions:</h5>
             <!-- <p>{{ recipe.instructions }}</p> -->
             <ul>
-                    <li v-for="instruction in recipe.Instructions.split('\n')" :key="instruction">{{ instruction }}</li>
+                    <li v-for="instruction in recipe.Instructions.split('.')" :key="instruction">{{ instruction }}</li>
                 </ul>
           </div>
           <div class="recipe-ingredients">
             <h5>Ingredients:</h5>
             <ul>
-                    <li v-for="ingredient in recipe.Ingredients.split('\n')" :key="ingredient">{{ ingredient }}</li>
+                    <li v-for="ingredient in recipe.Ingredients.split('.')" :key="ingredient">{{ ingredient }}</li>
                 </ul>
           </div>
       </b-card>

@@ -2,6 +2,7 @@
   <div class="container">
     <h1 class="title">Register</h1>
     <b-form class="fields" @submit.prevent="onRegister" @reset.prevent="onReset">
+      <!-- Username Input -->
       <b-form-group
         id="input-group-username"
         label-cols-sm="3"
@@ -26,6 +27,45 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
+      <!-- First Name Input -->
+      <b-form-group
+        id="input-group-firstName"
+        label-cols-sm="3"
+        label="First Name:"
+        label-for="firstName"
+      >
+        <b-form-input
+          id="firstName"
+          v-model="$v.form.firstName.$model"
+          type="text"
+          class="custom-input"
+          :state="validateState('firstName')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.firstName.required">
+          First Name is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <!-- Last Name Input -->
+      <b-form-group
+        id="input-group-lastName"
+        label-cols-sm="3"
+        label="Last Name:"
+        label-for="lastName"
+      >
+        <b-form-input
+          id="lastName"
+          v-model="$v.form.lastName.$model"
+          type="text"
+          class="custom-input"
+          :state="validateState('lastName')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.lastName.required">
+          Last Name is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <!-- Country Select -->
       <b-form-group
         id="input-group-country"
         label-cols-sm="3"
@@ -44,13 +84,14 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
+      <!-- Password Input -->
       <b-form-group
         id="input-group-Password"
         label-cols-sm="3"
         label="Password:"
         label-for="password"
       >
-        <!-- <b-form-input
+        <b-form-input
           id="password"
           type="password"
           class="custom-input"
@@ -62,39 +103,21 @@
         </b-form-invalid-feedback>
         <b-form-text v-else-if="$v.form.password.$error" text-variant="info">
           Your password should be <strong>strong</strong>. <br />
-          For that, your password should be also:
+          For that, your password should contain at least one character and one number
         </b-form-text>
         <b-form-invalid-feedback
           v-if="$v.form.password.required && !$v.form.password.length"
         >
           Have length between 5-10 characters long
-        </b-form-invalid-feedback> -->
-        <b-form-input
-      id="password"
-      type="password"
-      class="custom-input"
-      v-model="$v.form.password.$model"
-      :state="validateState('password')"
-    ></b-form-input>
-    <b-form-invalid-feedback v-if="!$v.form.password.required">
-      Password is required
-    </b-form-invalid-feedback>
-    <b-form-text v-else-if="$v.form.password.$error" text-variant="info">
-      Your password should be <strong>strong</strong>. <br />
-      For that, your password should contains at least one character and one number
-    </b-form-text>
-    <b-form-invalid-feedback
-      v-if="$v.form.password.required && !$v.form.password.length"
-    >
-      Have length between 5-10 characters long
-    </b-form-invalid-feedback>
-    <b-form-invalid-feedback
-      v-else-if="!$v.form.password.$params.customValidation"
-    >
-      Password must contain at least one character and one number
-    </b-form-invalid-feedback>
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          v-else-if="!$v.form.password.$params.customValidation"
+        >
+          Password must contain at least one character and one number
+        </b-form-invalid-feedback>
       </b-form-group>
 
+      <!-- Confirm Password Input -->
       <b-form-group
         id="input-group-confirmedPassword"
         label-cols-sm="3"
@@ -118,14 +141,38 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
+      <!-- Email Input -->
+      <b-form-group
+        id="input-group-email"
+        label-cols-sm="3"
+        label="Email:"
+        label-for="email"
+      >
+        <b-form-input
+          id="email"
+          v-model="$v.form.email.$model"
+          type="email"
+          class="custom-input"
+          :state="validateState('email')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.email.required">
+          Email is required
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else-if="!$v.form.email.email">
+          Please enter a valid email address
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <!-- Reset and Register Buttons -->
       <b-button type="reset">Reset</b-button>
       <b-button
         type="submit"
         variant="success"
-        style="width:250px;"
+        style="width: 250px;"
         class="ml-5 w-75"
-        >Register</b-button
       >
+        Register
+      </b-button>
       <div class="mt-2 text-center">
         You have an account already?
         <router-link to="login"> Log in here</router-link>
@@ -151,6 +198,7 @@ import {
   maxLength,
   alpha,
   sameAs,
+  email,
   helpers
 } from "vuelidate/lib/validators";
 
@@ -180,6 +228,12 @@ export default {
         length: (u) => minLength(3)(u) && maxLength(8)(u),
         alpha
       },
+      firstName: {
+        required
+      },
+      lastName: {
+        required
+      },
       country: {
         required
       },
@@ -195,13 +249,15 @@ export default {
       confirmedPassword: {
         required,
         sameAsPassword: sameAs("password")
+      },
+      email: {
+        required,
+        email
       }
     }
   },
   mounted() {
-    // console.log("mounted");
     this.countries.push(...countries);
-    // console.log($v);
   },
   methods: {
     validateState(param) {
@@ -209,6 +265,7 @@ export default {
       return $dirty ? !$error : null;
     },
     async Register() {
+      console.log(this.form);
       try {
         const response = await this.axios.post(
           // "https://test-for-3-2.herokuapp.com/user/Register",
@@ -216,10 +273,15 @@ export default {
 
           {
             username: this.form.username,
-            password: this.form.password
+            firstName: this.form.firstName,
+            lastName: this.form.lastName,
+            country: this.form.country,
+            password: this.form.password,
+            email: this.form.email
           }
         );
-        this.$router.push("/login");
+
+        this.$root.toast("Input Error", "Register Successfuly", "success");        this.$router.push("/login");
         // console.log(response);
       } catch (err) {
         console.log(err.response);
@@ -227,12 +289,10 @@ export default {
       }
     },
     onRegister() {
-      // console.log("register method called");
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       }
-      // console.log("register method go");
       this.Register();
     },
     onReset() {
@@ -252,15 +312,14 @@ export default {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .container {
   max-width: 500px;
 }
 .custom-input {
   background-color: #d6f3e1;
-  border-color: #95a19c; /* Change the border color of the input boxes */
-  color: #333; /* Change the text color of the input boxes */
+  border-color: #95a19c;
+  color: #333;
 }
-
-
 </style>

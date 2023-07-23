@@ -26,6 +26,28 @@
         <p v-if="recipe.glutenFree">Gluten-Free</p>
         <p>Servings: {{ recipe.servings }}</p>
         <p>Likes: {{ recipe.popularity? recipe.popularity : 0 }}</p>
+
+        <span class="fav-btn" v-if="this.$root.store.username">
+          <button
+              @click="toggleFavorite()"
+              class="btn btn-link"
+              style="padding: 0; border: none; background: none;"
+            >
+              <i
+                v-if="this.isFavorite"
+                class="fas fa-heart"
+                style="color: rgb(15, 143, 68);"
+              ></i>
+              <i
+                v-else
+                class="far fa-heart"
+                style="color: rgb(0, 0, 0);"
+              ></i>
+            </button>
+
+
+          </span>
+
       </div>
     </div>
 
@@ -64,25 +86,43 @@ export default {
   name: 'recipe',
   data() {
     return {
-      recipe: null
+      recipe: null,
+      isFavorite:false
+
+
+      
     };
   },
+
   async created() {
     try {
       let response;
-      // response = this.$route.params.response;
-
+      //check if the recipe is in the session storage and if so use it instead of making a request to the server
+      if (sessionStorage.getItem("recipe-"+this.$route.params.recipeId) !== null){
+        this.recipe = JSON.parse(sessionStorage.getItem("recipe-"+this.$route.params.recipeId));
+        return;
+      }
+      
+    //if the recipe is not in the session storage, make a request to the server
       try {
         response = await this.axios.get(
-          // "https://test-for-3-2.herokuapp.com/recipes/info",
-          // this.$root.store.server_domain + "/recipes/info",
-          // {
-          //   params: { id: this.$route.params.recipeId }
-          // }
+
           `${this.$root.store.server_domain}/recipes/fullDetails/${this.$route.params.recipeId}/`
         , {withCredentials: true});
 
-        // console.log("response.status", response.status);
+        //check if the recipe is in the user's favorites
+        this.isFavorite = response.data.isFavorite;
+
+        let random_recipes = JSON.parse(sessionStorage.getItem("randomRecipes"));
+        if (random_recipes){
+          random_recipes.forEach((recipe) => {
+            if (recipe.id === this.$route.params.recipeId){
+              recipe.isWatched = true;
+            }
+          });
+          sessionStorage.setItem("randomRecipes", JSON.stringify(random_recipes));
+        }
+
         if (response.status !== 200) this.$router.replace("/NotFound");
       } catch (error) {
         console.log("error.response.status", error.response.status);
@@ -96,6 +136,7 @@ export default {
 
 
       let {
+        id,
         vegetarian,
         vegan,
         glutenFree,
@@ -105,12 +146,14 @@ export default {
         popularity,
         readyInMinutes,
         image,
-        title
+        title,
+        isFavorite
       } = response.data;
 
 
 
       let _recipe = {
+        id,
         instructions,
         vegetarian,
         vegan,
@@ -120,15 +163,59 @@ export default {
         readyInMinutes,
         image,
         title,
-        popularity
+        popularity,
+        isFavorite
       };
 
-
       this.recipe = _recipe;
+      //save the recipe in the session storage
+      sessionStorage.setItem("recipe-"+this.$route.params.recipeId, JSON.stringify(_recipe));
+
     } catch (error) {
       console.log(error);
     }
+  },
+
+  methods: {
+    async toggleFavorite() {
+  if (this.$root.store.username && !this.isFavorite) {
+    this.recipe.isFavorite = !this.recipe.isFavorite;
+    this.isFavorite = true;
+    try {
+      await this.axios.post(
+        this.$root.store.server_domain + "/users/favorites",
+        { recipeId: this.recipe.id },
+        {withCredentials: true}
+      );
+      this.$emit("favorite-updated", this.recipe); // Emit the event
+
+      //change the session storage to reflect the change
+      let saved_details = JSON.parse(sessionStorage.getItem("recipe-"+this.$route.params.recipeId));
+
+      if (saved_details){
+        saved_details.isFavorite = true;
+        sessionStorage.setItem("recipe-"+this.$route.params.recipeId, JSON.stringify(saved_details));
+      }
+
+
+    } catch (error) {
+      this.$root.toast("Input Error", "Recipe already markes as favorite", "success");
+    }
+
+    try{
+        const response = await this.axios.get(this.$root.store.server_domain + "/users/favorites");
+        sessionStorage.setItem("favorites", JSON.stringify(response.data));
+
+      }
+      catch(error){
+        this.$root.toast("Input Error", error.message, "danger");
+      }
+
+
   }
+}
+  }
+
 };
 </script>
 
@@ -166,6 +253,14 @@ export default {
 
 .icon-label {
   margin-left: 5px;
+}
+
+.fav-btn{
+  transition: 0.3s;
+}
+
+.fav-btn:hover{
+  opacity: 0.5;
 }
 
 /* Include Font Awesome styles */

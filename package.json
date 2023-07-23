@@ -2,7 +2,7 @@
   "name": "assignment-3-3",
   "version": "1.0.0",
   "scripts": {
-    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --host 127.0.0.1",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
     "lint": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
   },
@@ -11,7 +11,10 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.15.0",
-    "core-js": "^3.6.5",
+    "client-sessions": "^0.8.0",
+    "cookie-parser": "^1.4.6",
+    "core-js": "^3.31.1",
+    "express-session": "^1.17.3",
     "sass": "^1.50.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",

@@ -12,7 +12,13 @@
               class="form-control search-input"
               placeholder="Search"
               @focus="focusSearchBar"
+              @keyup.enter="searchRecipes"
+              list="search-history-list" 
             >
+  <datalist id="search-history-list"> <!-- Specify the id of the datalist -->
+    <option v-for="query in searchHistory" :key="query" :value="query"></option>
+  </datalist>
+            
           </div>
         </div>
       </div>
@@ -76,12 +82,24 @@
             />
 
         </div>
+
+        <!-- Display a loading message while waiting for the results -->
+
+      <div v-if="loading" class="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+    <span>  Loading...</span>
+  </div>
+</div>
     </div>
   </div>
 </template>
 
 <script>
 import SearchResultPreview from "../components/SearchResultPreview.vue";
+import searchOptions from "../assets/searchOptions";
 export default {
   name: "SearchPage",
   components: {
@@ -93,69 +111,15 @@ export default {
       numberOfRecipes: 5,
       numberOfRecipesOptions: [5, 10, 15],
       selectedCuisine: "",
-      cuisineOptions: [
-        "",
-        'African',
-        'Asian',
-        'American',
-        'British',
-        'Cajun',
-        'Caribbean',
-        'Chinese',
-        'Eastern European',
-        'European',
-        'French',
-        'German',
-        'Greek',
-        'Indian',
-        'Irish',
-        'Italian',
-        'Japanese',
-        'Jewish',
-        'Korean',
-        'Latin American',
-        'Mediterranean',
-        'Mexican',
-        'Middle Eastern',
-        'Nordic',
-        'Southern',
-        'Spanish',
-        'Thai',
-        'Vietnamese'
-      ],
+      cuisineOptions: searchOptions.cuisineOptions,
       selectedDiet: "",
-      dietOptions: [
-        "",
-        'Gluten Free',
-        'Ketogenic',
-        'Vegetarian',
-        'Lacto-Vegetarian',
-        'Ovo-Vegetarian',
-        'Vegan',
-        'Pescetarian',
-        'Paleo',
-        'Primal',
-        'Low FODMAP',
-        'Whole30'
-      ],
+      dietOptions: searchOptions.dietOptions,
       selectedIntolerances: "",
-      intoleranceOptions: [
-        "",
-        'Dairy',
-        'Egg',
-        'Gluten',
-        'Grain',
-        'Peanut',
-        'Seafood',
-        'Sesame',
-        'Shellfish',
-        'Soy',
-        'Sulfite',
-        'Tree Nut',
-        'Wheat'
-      ],
+      intoleranceOptions: searchOptions.intoleranceOptions,
       searchResults: [],
-      filteredSearchResults: []
+      filteredSearchResults: [],
+      loading: false,
+      searchHistory: [],
     };
   },
   methods: {
@@ -168,39 +132,32 @@ export default {
         intolerances: this.selectedIntolerances,
       };
 
-      try{const response = await this.axios.get(this.$root.store.server_domain + "/recipes/search", { params });
-      this.searchResults = response.data;
+      try{
+        this.loading = true;
+        const response = await this.axios.get(this.$root.store.server_domain + "/recipes/search", { params });
+        this.searchResults = response.data;
+
+        this.searchHistory.push(this.searchQuery);
 
       if(this.$root.store.username){
-        sessionStorage.setItem("latestSearch", JSON.stringify(params));
+        sessionStorage.setItem("latestSearch", JSON.stringify(response.data));
 
       }
 
     } catch (error) {
-      this.$root.toast("Input Error", error.message, "danger");
+      this.$root.toast("Input Error", "Problen in Search", "danger");
+    }
+    finally{
+      this.loading = false;
     }
     },
 
     async getLastSearch() {
-      let search_params = JSON.parse(sessionStorage.getItem('latestSearch')) || null;
-      console.log(search_params);
-      if (search_params && this.$root.store.username) {
-        const params = {
-        query: search_params.query,
-        numberOfRecipes: search_params.numberOfRecipes,
-        cuisine: search_params.cuisine,
-        diet: search_params.diet,
-        intolerances: search_params.intolerances,
-      };
-        try{
-          console.log(search_params);
-          const response = await this.axios.get(this.$root.store.server_domain + "/recipes/search", { params });
-          this.searchResults = response.data;
-      
-    } catch (error) {
-      this.$root.toast("Input Error", error.message, "danger");
-    }
+      let latest_search = JSON.parse(sessionStorage.getItem('latestSearch')) || null;
+      if(latest_search){
+        this.searchResults = latest_search;
       }
+      
       
     },
 
@@ -274,4 +231,48 @@ export default {
 .filter-buttons button {
   margin-right: 0.5rem;
 }
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px); /* Add the blur effect */
+}
+
+.loading-box {
+  background-color: rgba(0, 128, 0, 0.5); /* Semi-transparent green background */
+  color: white;
+  padding: 30px; /* Increased padding for more space */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  position: relative; /* Add position: relative to center the box */
+  font-size: 24px; /* Increase font size */
+}
+
+.loading-box i {
+  font-size: 40px; /* Increase spinner size */
+  margin-right: 20px; /* Increased spacing */
+}
+
+/* Center the box horizontally and vertically */
+.loading-box::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+
 </style>

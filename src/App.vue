@@ -34,7 +34,7 @@
 <!-- Add Recipe Modal -->
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Add Recipe</h1>
@@ -44,39 +44,39 @@
         <form id="recipeForm" @submit="saveRecipe">
           <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" v-model="form.title" required>
+            <input type="text" class="form-control bg-custom" id="title" v-model="form.title" required>
           </div>
           <div class="mb-3">
             <label for="cookingTime" class="form-label">Cooking Time (minutes):</label>
-            <input type="number" class="form-control" id="cookingTime" v-model="form.cookingTime" required>
+            <input type="number" class="form-control bg-custom" id="cookingTime" v-model="form.cookingTime" required>
           </div>
           <div class="mb-3">
             <label for="imageURL" class="form-label">Image URL:</label>
-            <input type="text" class="form-control" id="imageURL" v-model="form.imageURL">
+            <input type="text" class="form-control bg-custom" id="imageURL" v-model="form.imageURL">
           </div>
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="vegan" v-model="form.vegan">
+            <input type="checkbox" class="form-check-input bg-custom" id="vegan" v-model="form.vegan">
             <label class="form-check-label" for="vegan">Vegan</label>
           </div>
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="vegetarian" v-model="form.vegetarian">
+            <input type="checkbox" class="form-check-input bg-custom" id="vegetarian" v-model="form.vegetarian">
             <label class="form-check-label" for="vegetarian">Vegetarian</label>
           </div>
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="glutenFree" v-model="form.glutenFree">
+            <input type="checkbox" class="form-check-input bg-custom" id="glutenFree" v-model="form.glutenFree">
             <label class="form-check-label" for="glutenFree">Gluten-Free</label>
           </div>
           <div class="mb-3">
             <label for="servings" class="form-label">Servings:</label>
-            <input type="number" class="form-control" id="servings" v-model="form.servings" required>
+            <input type="number" class="form-control bg-custom" id="servings" v-model="form.servings" required>
           </div>
           <div class="mb-3">
             <label for="instructions" class="form-label">Instructions:</label>
-            <textarea class="form-control" id="instructions" rows="4" v-model="form.instructions"></textarea>
+            <textarea class="form-control bg-custom" id="instructions" rows="4" v-model="form.instructions"></textarea>
           </div>
           <div class="mb-3">
             <label for="ingredients" class="form-label">Ingredients:</label>
-            <textarea class="form-control" id="ingredients" rows="4" v-model="form.ingredients"></textarea>
+            <textarea class="form-control bg-custom" id="ingredients" rows="4" v-model="form.ingredients"></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -182,7 +182,6 @@ export default {
     },
 
     async saveRecipe() {
-      console.log(this.form.imageURL);
     try {
       // Prepare the data to be sent
       const recipeData = {
@@ -245,17 +244,31 @@ export default {
   
 }
 
+// #nav {
+//   padding: 30px;
+//   border-bottom: 1px solid #ccc;
+//   background: linear-gradient(90deg, rgb(105, 189, 150) 0%, rgba(0, 172, 92, 1) 35%, rgb(64, 156, 99) 100%);}
+
+// #nav a {
+//   font-weight: bold;
+//   color: #ffffff;
+//   transition: color 0.3s ease-in-out;
+// }
+
 #nav {
-  padding: 30px;
+  padding: 15px 30px; /* Adjust the padding to reduce the overall height */
   border-bottom: 1px solid #ccc;
-  // background: rgb(0, 172, 92);
-  background: linear-gradient(90deg, rgb(105, 189, 150) 0%, rgba(0, 172, 92, 1) 35%, rgb(64, 156, 99) 100%);}
+  background: linear-gradient(90deg, rgb(105, 189, 150) 0%, rgba(0, 172, 92, 1) 35%, rgb(64, 156, 99) 100%);
+}
 
 #nav a {
   font-weight: bold;
   color: #ffffff;
+  font-size: 16px; /* Adjust the font size as per your preference */
   transition: color 0.3s ease-in-out;
+  line-height: 1.5; /* Adjust the line height to reduce the vertical space */
 }
+
 
 #nav a:hover {
   color: #4c687a;
@@ -291,6 +304,7 @@ export default {
   font-weight: bold;
   color: #ffffff;
   transition: color 0.3s ease-in-out;
+  border-radius: 4px;
 }
 
 #personal-dropdown:hover {
@@ -301,11 +315,12 @@ export default {
 #personal-dropdown .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: #a2e2c4;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(250, 248, 248, 0.2);
   padding: 12px 16px;
   z-index: 1;
+  border-radius: 4px;
 }
 
 #personal-dropdown:hover .dropdown-content {
@@ -374,6 +389,10 @@ export default {
 }
 
 
+.bg-custom {
+  background-color: #d6f3e1;
+}
+
 .logout-button {
   background-color: #42b983;
   color: #fff;
@@ -402,43 +421,6 @@ export default {
 }
 
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(to left,rgb(146, 199, 164), rgba(141, 184, 133, 0.5), rgba(99, 158, 88, 0.5));
-
-}
-
-.modal-close {
-  background-color: #ccc;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.modal {
   display: none;
   position: fixed;
   z-index: 1050;
@@ -452,8 +434,8 @@ export default {
 
 .modal-dialog {
   position: relative;
-  width: auto;
-  margin: 10px;
+  width: 100%;
+  margin: 10px auto;
 }
 
 .modal-content {
@@ -465,6 +447,9 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
   outline: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to left,rgb(146, 199, 164), rgba(141, 184, 133), rgb(129, 177, 120));
+  
 }
 
 .modal-header {
@@ -478,7 +463,6 @@ export default {
 }
 
 .modal-body {
-
   position: relative;
   flex: 1 1 auto;
   padding: 15px;
@@ -491,6 +475,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+
 
 .close {
   float: right;
@@ -533,5 +518,9 @@ footer a {
   color: #ffffff;
   text-decoration: none;
   margin: 0 5px;
+}
+
+.toast:not(.show) {
+   display: block;
 }
 </style>

@@ -5,11 +5,10 @@ import axios from "axios";
 
 import routes from "./routes";
 import VueRouter from "vue-router";
-import VueCookies from "vue-cookies"
+// import VueCookies from "vue-cookies"
 
-Vue.use(VueCookies);
-
-
+// Vue.use(VueCookies);
+// axios.defaults.withCredentials = true;
 
 
 
@@ -17,6 +16,8 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
 });
+
+
 
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
@@ -70,15 +71,22 @@ axios.interceptors.response.use(
   }
 );
 
+
+
+
+
+
+
 Vue.use(VueAxios, axios);
-axios.defaults.withCredentials=true;
 
 Vue.config.productionTip = false;
-
+// axios.defaults.withCredentials = true;
 
 
 const shared_data = {
-  server_domain: 'http://localhost:3000',
+  // server_domain: 'http://localhost:3000',
+    server_domain: "https://recipeIL.cs.bgu.ac.il",
+
   username: localStorage.username,
   login(username) {
     localStorage.setItem("username", username);
@@ -90,6 +98,7 @@ const shared_data = {
     console.log("logout");
     localStorage.removeItem("username");
     localStorage.removeItem("latestSearch");
+    // sessionStorage.clear();
     
     this.username = undefined;
   },
@@ -111,8 +120,8 @@ new Vue({
         toaster: "b-toaster-top-center",
         variant: variant,
         solid: true,
-        appendToast: append,
-        autoHideDelay: 4000,
+        appendToast: false,
+        autoHideDelay: 2000,
       });
     },
   },
