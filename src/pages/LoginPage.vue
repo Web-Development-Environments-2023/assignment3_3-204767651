@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h1 class="title">Login</h1>
+
     <b-form @submit.prevent="onLogin">
       <b-form-group
         id="input-group-Username"
@@ -12,6 +13,7 @@
           id="Username"
           v-model="$v.form.username.$model"
           type="text"
+          class="custom-input"
           :state="validateState('username')"
         ></b-form-input>
         <b-form-invalid-feedback>
@@ -28,18 +30,20 @@
         <b-form-input
           id="Password"
           type="password"
+          class="custom-input"
           v-model="$v.form.password.$model"
           :state="validateState('password')"
         ></b-form-input>
         <b-form-invalid-feedback>
           Password is required
         </b-form-invalid-feedback>
+
       </b-form-group>
 
       <b-button
         type="submit"
-        variant="primary"
-        style="width:100px;display:block;"
+        variant="success"
+        style="width:40%;display:block;"
         class="mx-auto w-100"
         >Login</b-button
       >
@@ -64,7 +68,7 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required} from "vuelidate/lib/validators";
 export default {
   name: "Login",
   data() {
@@ -82,7 +86,7 @@ export default {
         required
       },
       password: {
-        required
+        required,
       }
     }
   },
@@ -95,21 +99,28 @@ export default {
       try {
         
         const response = await this.axios.post(
-          // "https://test-for-3-2.herokuapp.com/user/Login",
           this.$root.store.server_domain +"/Login",
-          // "http://132.72.65.211:80/Login",
-          // "http://132.73.84.100:80/Login",
-
+          
           {
             username: this.form.username,
             password: this.form.password
-          }
+          },
+          {withCredentials: true}
         );
         // console.log(response);
-        // this.$root.loggedIn = true;
-        console.log(this.$root.store.login);
+        this.$root.isLoggedIn = true;
+        // console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
-        this.$router.push("/");
+        localStorage.setItem("isLoggedIn", true);
+        // this.$emit("login", true);
+
+        if(this.$route.path !== "/"){
+          this.$router.push("/");
+        }
+        else{
+          location.reload();
+        }
+        // this.$router.push("/");
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
@@ -122,7 +133,8 @@ export default {
       if (this.$v.form.$anyError) {
         return;
       }
-      // console.log("login method go");
+
+    
 
       this.Login();
     }
@@ -131,6 +143,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2%;
   max-width: 400px;
+}
+.custom-input {
+  background-color: #d6f3e1;
+  border-color: #95a19c; /* Change the border color of the input boxes */
+  color: #333; /* Change the text color of the input boxes */
 }
 </style>

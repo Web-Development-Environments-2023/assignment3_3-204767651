@@ -1,15 +1,27 @@
 <template>
-  <b-container>
-    <h3>
-      {{ title }}:
-      <slot></slot>
-    </h3>
-    <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="container">
+    <h2 style="font-weight: bold;">{{ title }}</h2>
+
+    <b-container>
+      <div class="recipe-column">
+        <div v-for="r in recipes" :key="r.id" class="recipe-wrapper">
+          <RecipePreview :recipe="r" class="recipePreview" />
+        </div>
+
+        <div class="button-wrapper">
+          <b-button
+            v-if="randomized === true"
+            width="auto"
+            class="more-recipes-button"
+            variant="success"
+            @click="$emit('updateRandom')"
+          >
+            More Recipes!
+          </b-button>
+        </div>
+      </div>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -20,42 +32,39 @@ export default {
     RecipePreview
   },
   props: {
-    title: {
-      type: String,
-      required: true
+    title: {type: String, required: false},
+    recipes: {type: Array, required: true},
+    randomized: {type: Boolean, default: false}
+  },
+  created() {
+    if(!this.recipes || !this.recipes.length ===0) {
+      this.$emit("created")
     }
   },
-  data() {
-    return {
-      recipes: []
-    };
-  },
-  mounted() {
-    this.updateRecipes();
-  },
-  methods: {
-    async updateRecipes() {
-      try {
-        const response = await this.axios.get(
-          this.$root.store.server_domain + "/recipes/random",
-          // "https://test-for-3-2.herokuapp.com/recipes/random"
-        );
 
-        // console.log(response);
-        const recipes = response.data.recipes;
-        this.recipes = [];
-        this.recipes.push(...recipes);
-        // console.log(this.recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
 };
 </script>
 
-<style lang="scss" scoped>
-.container {
-  min-height: 400px;
+
+ <style scoped>
+.recipe-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.recipePreview {
+  display: block;
+}
+
+.recipe-wrapper {
+  margin-bottom: 10px;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 </style>

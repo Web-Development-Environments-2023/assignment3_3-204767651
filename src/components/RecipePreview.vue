@@ -1,141 +1,302 @@
-<template>
-  <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-    class="recipe-preview"
-  >
-    <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
-    </div>
-    <div class="recipe-footer">
-      <div :title="recipe.title" class="recipe-title">
-        {{ recipe.title }}
+      <template>
+        <div class="container">
+          <b-card class="recipe-preview">
+            <div class="recipe-body">
+              <div :title="recipe.title" class="recipe-title" @click="goToRecipe">{{ recipe.title }}</div>
+        <div class="recipe-image-container" @click="goToRecipe">
+
+        <div v-if="!imageLoaded" class="spinner">
+          <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <img
+          :src="recipe.image"
+          class="recipe-image"
+          @load="handleImageLoad"
+        />
+        
       </div>
-      <ul class="recipe-overview">
-        <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
-      </ul>
-    </div>
-  </router-link>
+      </div>
+      <div class="recipe-footer">
+        <ul class="recipe-overview">
+          <li>{{ recipe.readyInMinutes }} minutes</li>
+          <li>{{ recipe.popularity || recipe.aggregateLikes}} likes</li>
+          <li>{{ recipe.servings ? recipe.servings + " servings" : "" }} </li>
+          <li data-placement="top" title="vegetarian" v-if="recipe.vegetarian"><i class="fas fa-leaf"></i></li>
+          <li data-placement="top" title="vegan" v-if="recipe.vegan"><i class="fas fa-seedling" style = "color: rgb(15, 143, 68)"></i></li>
+          <li v-if="recipe.isWatched"><i class="fas fa-eye"></i></li>
+          <li class="fav-btn" v-if="this.$root.store.username">
+            <button
+              @click="toggleFavorite()"
+              class="btn btn-link"
+              style="padding: 0; border: none; background: none;"
+            >
+              <i
+                v-if="this.isFavorite"
+                class="fas fa-heart"
+                style="color: rgb(15, 143, 68);"
+              ></i>
+              <i
+                v-else
+                class="far fa-heart"
+                style="color: rgb(0, 0, 0);"
+              ></i>
+            </button>
+
+
+          </li>
+
+
+        </ul>
+      </div>
+    </b-card>
+  </div>
 </template>
 
+
 <script>
+
 export default {
-  mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
-  },
+  name: "RecipePreview",
+  // mounted() {
+  //   // this.axios.get(this.recipe.image).then((i) => {
+  //   //   this.image_load = true;
+  //   // });
+  //   // this.isFavorite = this.recipe.isFavorite;
+  // },
   data() {
     return {
-      image_load: false
+      imageLoaded: false,
+      isFavorite: this.recipe.isFavorite
+
     };
   },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem("isLoggedIn") === "true";
+    },
+  },
+
+
+
+
+  methods: {
+    goToRecipe() {
+      console.log("goToRecipe", this.recipe.id);
+      this.recipe.isWatched = true;
+      let saved_last_viewed = JSON.parse(sessionStorage.getItem("lastViewed"));
+      if (saved_last_viewed){
+        saved_last_viewed.push(this.recipe);
+        sessionStorage.setItem("lastViewed", JSON.stringify(saved_last_viewed));
+      }
+      else{
+        sessionStorage.setItem("lastViewed", JSON.stringify([this.recipe]));
+      }
+
+
+
+      this.$router.push({ name: "recipe", params: { recipeId: this.recipe.id } });
+    },
+    handleImageLoad() {
+      this.imageLoaded = true;
+    },
+
+async toggleFavorite() {
+  if (this.$root.store.username && !this.isFavorite) {
+    this.recipe.isFavorite = !this.recipe.isFavorite;
+    this.isFavorite = true;
+    try {
+      await this.axios.post(
+        this.$root.store.server_domain + "/users/favorites",
+        { recipeId: this.recipe.id },
+        {withCredentials: true}
+      );
+
+        //change the session storage to reflect the change
+        let saved_details = JSON.parse(sessionStorage.getItem("recipe-"+this.recipe.id));
+
+      if (saved_details){
+        saved_details.isFavorite = true;
+        sessionStorage.setItem("recipe-"+this.$route.params.recipeId, JSON.stringify(saved_details));
+      }
+
+      //change the session storage to reflect the change
+      let randomRecipes = JSON.parse(sessionStorage.getItem("randomRecipes"));
+      if (randomRecipes){
+        randomRecipes.forEach((recipe) => {
+          if (recipe.id === this.recipe.id){
+            recipe.isFavorite = true;
+          }
+        });
+        sessionStorage.setItem("randomRecipes", JSON.stringify(randomRecipes));
+      }
+
+
+      this.$emit("favorite-updated", this.recipe); // Emit the event
+    } catch (error) {
+      this.$root.toast("Input Error", "Recipe already marked as favorite", "success");
+    }
+
+    try{
+        const response = await this.axios.get(this.$root.store.server_domain + "/users/favorites");
+        sessionStorage.setItem("favorites", JSON.stringify(response.data));
+
+      }
+      catch(error){
+        this.$root.toast("Input Error", error.message, "danger");
+      }
+
+
+  }
+},
+
+  },
+
+
+
   props: {
     recipe: {
       type: Object,
       required: true
     }
 
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
   }
 };
 </script>
 
 <style scoped>
+
+
 .recipe-preview {
-  display: inline-block;
-  width: 90%;
-  height: 100%;
-  position: relative;
-  margin: 10px 10px;
-}
-.recipe-preview > .recipe-body {
+  margin: 3%;
+  color: black;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.1),
+    rgba(141, 184, 133, 0.1),
+    rgba(99, 158, 88, 0.1)
+  );
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
   width: 100%;
-  height: 200px;
-  position: relative;
+  height: 100%;
+
+  
+  
 }
 
-.recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  display: block;
-  width: 98%;
+.recipe-preview:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.recipe-title{
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.recipe-title:hover {
+  opacity: 0.5;
+}
+
+.recipe-preview > .recipe-body {
+  padding: 10px;
+  width: 100%;
   height: auto;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
+.recipe-preview .recipe-image-container {
+  position: relative;
+  padding-top: 2%;
+  /* height: 200px; */
+}
+
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.recipe-preview .recipe-body .recipe-image {
+  margin: auto;
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  height: 80%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
+  border-radius: 10px;
+  left: 0;
+  opacity: 1;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  cursor: pointer;
+}
+.recipe-preview .recipe-body:hover .recipe-image {
+  opacity: 0.3;
 }
 
-.recipe-preview .recipe-footer {
-  width: 100%;
-  height: 50%;
+.fav-btn{
+  transition: 0.3s;
+}
+
+.fav-btn:hover{
+  opacity: 0.5;
+}
+
+
+.recipe-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+  padding-top: 2%;
+  
 }
 
-.recipe-preview .recipe-footer .recipe-title {
-  padding: 10px 10px;
+.recipe-footer .recipe-title {
+  padding: 10px;
   width: 100%;
   font-size: 12pt;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
-  -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+
+
 }
 
-.recipe-preview .recipe-footer ul.recipe-overview {
+.recipe-footer ul.recipe-overview {
   padding: 5px 10px;
   width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1 auto;
-  -ms-flex: 1 auto;
-  flex: 1 auto;
-  table-layout: fixed;
-  margin-bottom: 0px;
+  justify-content: space-between;
+  list-style-type: none;
+  margin-bottom: 0;
 }
 
-.recipe-preview .recipe-footer ul.recipe-overview li {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex-grow: 1;
+.recipe-footer ul.recipe-overview li {
   flex-grow: 1;
-  width: 90px;
-  display: table-cell;
   text-align: center;
+  padding: 3px;
 }
+
+
+@import "~@fortawesome/fontawesome-free/css/all.css";
 </style>
